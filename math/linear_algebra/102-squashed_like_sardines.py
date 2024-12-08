@@ -1,4 +1,4 @@
-#/usr/bin/ env python3
+#!/usr/bin/ env python3
 """Defines cat_matrices"""
 import numpy as np
 
