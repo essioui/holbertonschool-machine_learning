@@ -1,18 +1,15 @@
 #!/usr/bin/env python3
 """Defines cat_matrices"""
-import numpy as np
 
 
 def cat_matrices(mat1, mat2, axis=0):
     """
     concatenates two matrices along a specific axis
     """
-    try:
-        # transfer lists to arrays numpy for use np.conacatenate
-        np_mat1 = np.array(mat1)
-        np_mat2 = np.array(mat2)
-        result = np.concatenate((np_mat1, np_mat2), axis=axis)
-        # return the result as lists
-        return result.tolist()
-    except ValueError:
+    if axis == 0:
+        if isinstance(mat1[0], (int, float)) and isinstance(mat2[0], (int, float)):
+            return mat1 +mat2
+        if all(len(row) == len(mat2[0]) for row in mat1) and all(len(row) == len(mat1[0])for row in mat2):
+            return mat1+mat2
         return None
+    return None
