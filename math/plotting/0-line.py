@@ -4,6 +4,16 @@ import matplotlib.pyplot as plt
 
 
 def line():
+    """
+    line graph
+    plt.figure: dimension of figure
+    plt.plot:
+        x = np.arange(0, 11)
+        y = np.arange(0,11) ** 3
+        plt.xlim = the axis x start from 0 end 10
+        r: for color red
+    show(): function for see the figure
+    """
     y = np.arange(0, 11) ** 3
     plt.figure(figsize=(6.4, 4.8))
 
