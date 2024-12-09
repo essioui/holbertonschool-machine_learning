@@ -16,8 +16,10 @@ def scatter():
     y += 180
     plt.figure(figsize=(6.4, 4.8))
 
+    plt.scatter(x, y, c='magenta', marker='o')
+    plt.suptitle("Men's Height vs Weight")
+
     plt.xlabel('Height (in)')
     plt.ylabel('Weight (lbs)')
-    plt.suptitle("Men's Height vs Weight")
-    plt.scatter(x, y, c='magenta', marker='o')
+    
     plt.show()
