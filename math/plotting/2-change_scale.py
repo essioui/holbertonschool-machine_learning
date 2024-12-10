@@ -1,4 +1,4 @@
-#!/usr/bin/ env python3
+#!/usr/bin/env python3
 """plot x ↦ y as a line graph"""
 import numpy as np
 import matplotlib.pyplot as plt
