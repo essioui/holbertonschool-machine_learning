@@ -3,19 +3,22 @@
 
 
 def poly_integral(poly, C=0):
-    """
-    integral of a polynomial
-    """
-    if not isinstance(poly, list) or not all(
-            (isinstance(x, (int, float))for x in poly)) or not (
-            isinstance(C, (int, float))):
+    """function to integrate a poly"""
+
+    if type(poly) is not list:
         return None
-    if all(coeff == 0 for coeff in poly):
+    elif not poly:
+        return None
+    elif len(poly) == 0:
+        return None
+    elif type(C) is not int:
+        return None
+    elif poly == [0]:
         return [C]
-    integral = [C]
-    for i in range(len(poly)):
-        coeff = poly[i]
-        if coeff != 0:
-            integral.append(coeff / (i + 1))
-    return [int(x) if
-            isinstance(x, float) and x.is_integer() else x for x in integral]
+    else:
+        integral = []
+        integral.append(C)
+        for i in range(len(poly)):
+            x = poly[i] / (i + 1)
+            integral.append(int(x) if x.is_integer() else x)
+        return integral
