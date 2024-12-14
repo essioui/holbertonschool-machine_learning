@@ -15,4 +15,4 @@ def poly_integral(poly, C=0):
         if coeff != 0:
             integral.append(coeff / (i + 1))
     integral.insert(0, C)
-    return integral
+    return [int(x) if isinstance(x, float) and x.is_integer() else x for x in integral]
