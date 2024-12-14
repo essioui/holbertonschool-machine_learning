@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
+"""scatter plot"""
 import numpy as np
 import matplotlib.pyplot as plt
 
 
 def gradient():
-
+    """
+    scatter plot with colorbar
+    we can use orientation='horizontal' for see it bottom y-axis
+    """
     np.random.seed(5)
 
     x = np.random.randn(2000) * 10
