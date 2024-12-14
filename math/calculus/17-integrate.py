@@ -10,10 +10,12 @@ def poly_integral(poly, C=0):
             (isinstance(x, (int, float))for x in poly)) or not (
             isinstance(C, (int, float))):
         return None
-    integral = []
-    for i, coeff in enumerate(poly):
+    if all(coeff == 0 for coeff in poly):
+        return [C]
+    integral = [C]
+    for i in range(len(poly)):
+        coeff = poly[i]
         if coeff != 0:
             integral.append(coeff / (i + 1))
-    integral.insert(0, C)
-    return [int(x) if isinstance(x, float) and
-            x.is_integer() else x for x in integral]
+    return [int(x) if
+            isinstance(x, float) and x.is_integer() else x for x in integral]
