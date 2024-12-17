@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
-
+"""
+0. Depth of a decision tree
+Defines classes and methods in decision tree
+Classes:
+    Node: no leaf in tree
+    Leaf: leaf node and inheritfrom Node
+    Decision_Tree: main class
+"""
 import numpy as np
 
 
@@ -43,7 +50,7 @@ class Node:
 
 class Leaf(Node):
     """
-    Structure of decision tree
+    Structure of decision tree for leaf
     inhirt from class Node
     """
     def __init__(self, value, depth=None):
@@ -59,7 +66,8 @@ class Leaf(Node):
 
 class Decision_Tree():
     """
-    Structure of decision tree
+    Structure of decision tree main class
+    return the depth
     """
     def __init__(self, max_depth=10, min_pop=1, seed=0,
                  split_criterion="random", root=None):
