@@ -13,6 +13,7 @@ import numpy as np
 class Node:
     """
     Structure of decision tree
+    Attributes:
         feature: the property use for partition
         threshold: build nodes
         left_child, right_child: branch from nodes
@@ -33,7 +34,7 @@ class Node:
 
     def max_depth_below(self):
         """
-        function for know the long deep of tree
+        Calculate  the maximum depth of tree
             is_leaf: the deep is leaf
             left_depth, right_depth: calculate the deep of tree
         Return: the max between left deep and right deep
@@ -50,8 +51,10 @@ class Node:
 
 class Leaf(Node):
     """
-    Structure of decision tree for leaf
-    inhirt from class Node
+    a leaf node in decision tree inhirt from class Node
+    attributes:
+        value: the value for leaf node
+        depth: the depth of the leaf node
     """
     def __init__(self, value, depth=None):
         super().__init__()
@@ -60,13 +63,19 @@ class Leaf(Node):
         self.depth = depth
 
     def max_depth_below(self):
-        """depth is the leaf"""
+        """Return depth is the leaf"""
         return self.depth
 
 
 class Decision_Tree():
     """
-    Structure of decision tree main class
+    Decision tree of classification or regression
+    Attributes:
+        max_depth: the maximum depth of tree
+        min_pop: the minimum number for split tree
+        seed: used for random number
+        split_criterion: used to split a node
+        root: the root node of tree
     return the depth
     """
     def __init__(self, max_depth=10, min_pop=1, seed=0,
@@ -84,4 +93,5 @@ class Decision_Tree():
         self.predict = None
 
     def depth(self):
+        """Return the maximum depth of tree"""
         return self.root.max_depth_below()
