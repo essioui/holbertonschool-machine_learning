@@ -51,7 +51,10 @@ class Node:
         """
         left_text = self.left_child.__str__() if self.left_child else ""
         right_text = self.right_child.__str__() if self.right_child else ""
-        text = f"Node [feature={self.feature}, threshold={self.threshold}]"
+        if self.is_root:
+            text = f"root [feature={self.feature}, threshold={self.threshold}]"
+        else:
+            text = f"node [feature={self.feature}, threshold={self.threshold}]"
         if self.is_leaf:
             return f"-> leaf [value={self.value}]"
         else:
