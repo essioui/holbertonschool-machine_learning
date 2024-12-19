@@ -1,24 +1,12 @@
-#!/usr/bin/env python3
-"""
-0. Depth of a decision tree
-Defines classes and methods in decision tree
-Classes:
-    Node: no leaf in tree
-    Leaf: leaf node and inheritfrom Node
-    Decision_Tree: main class
-"""
-import numpy as np
-
-
 class Node:
     """
     Structure of decision tree
     Attributes:
-        feature: the property use for partition
+        feature: the property used for partition
         threshold: build nodes
-        left_child, right_child: branch from nodes
-        is_leaf: if is leaf or no
-        depth: deeping of tree
+        left_child, right_child: branches from nodes
+        is_leaf: if the node is a leaf
+        depth: depth of tree
     """
 
     def __init__(self, feature=None, threshold=None, left_child=None,
@@ -34,46 +22,46 @@ class Node:
 
     def left_child_add_prefix(self, text):
         """
-        take tree like text and split by "\n"
+        Add a prefix to the left child text
         """
         lines = text.split("\n")
-        new_text = "    +--"+lines[0]+"\n"
+        new_text = "    +--" + lines[0] + "\n"
         for x in lines[1:]:
-            new_text += ("    |  "+x)+"\n"
-        return (new_text)
+            new_text += "    |  " + x + "\n"
+        return new_text
 
     def right_child_add_prefix(self, text):
         """
-        take tree like text and split by "\n"
+        Add a prefix to the right child text
         """
         lines = text.split("\n")
-        new_text = "    +--"+lines[0]+"\n"
+        new_text = "    +--" + lines[0] + "\n"
         for x in lines[1:]:
-            new_text += ("    |  "+x)+"\n"
-        return (new_text)
+            new_text += "      " + x + "\n"
+        return new_text
 
     def __str__(self):
         """
-        Present the nodes not leaf in tree
+        Present the nodes (non-leaf) in the tree
         Return:
-            text: Node [feature=feature, thresold=threshold]
+            text: Node [feature=feature, threshold=threshold]
             concatenate between left_text and right_text
         """
         left_text = self.left_child.__str__() if self.left_child else ""
         right_text = self.right_child.__str__() if self.right_child else ""
         text = f"Node [feature={self.feature}, threshold={self.threshold}]"
-
-        if self.left_child and self.right_child:
+        if self.is_leaf:
+            return f"-> leaf [value={self.value}]"
+        else:
             left_text = self.left_child_add_prefix(left_text)
             right_text = self.right_child_add_prefix(right_text)
-
-        return f"{text}\n{left_text}{right_text}"
+            return f"{text}\n{left_text}{right_text}"
 
 
 class Leaf(Node):
     """
-    a leaf node in decision tree inhirt from class Node
-    attributes:
+    A leaf node in a decision tree inheriting from class Node
+    Attributes:
         value: the value for leaf node
         depth: the depth of the leaf node
     """
@@ -84,18 +72,17 @@ class Leaf(Node):
         self.depth = depth
 
     def __str__(self):
-        """Return the value of leaf ->leaf [value=value]"""
-        return (f"-> leaf [value={self.value}]")
+        """Return the value of the leaf node"""
+        return f"-> leaf [value={self.value}]"
 
 
 class Decision_Tree:
     def __init__(self, root=None):
         """
-        Print tree start from root node
-        if is_root=False that mean isnt root node
+        Initialize a decision tree with a root node
         """
         self.root = root if root else Node(is_root=True)
 
     def __str__(self):
-        """Print tree like text"""
+        """Print tree like text starting from root node"""
         return self.root.__str__()
