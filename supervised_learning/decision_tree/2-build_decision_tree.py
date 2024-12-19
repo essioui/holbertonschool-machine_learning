@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+"""Defines Let's print our Tree"""
 class Node:
     """
     Structure of decision tree
