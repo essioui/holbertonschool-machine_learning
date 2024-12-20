@@ -45,7 +45,7 @@ class Node:
     def __str__(self):
         """Return the result in string"""
         if self.is_leaf:
-            return f"-> Leaf [value={self.value}]"
+            return f"-> leaf [value={self.value}]"
 
 
 class Leaf(Node):
