@@ -26,21 +26,21 @@ class Node:
         """
         Add a prefix to the left child text
         """
-        lines = text.split("\n")
-        new_text = "    +--" + lines[0] + "\n"
-        for x in lines[1:]:
-            new_text += "    |  " + x + "\n"
-        return new_text
+        lines=text.split("\n")
+        new_text="    +--"+lines[0]+"\n"
+        for x in lines[1:] :
+            new_text+=("    |  "+x)+"\n"
+        return (new_text)
 
     def right_child_add_prefix(self, text):
         """
         Add a prefix to the right child text
         """
-        lines = text.split("\n")
-        new_text = "    +--" + lines[0] + "\n"
-        for x in lines[1:]:
-            new_text += "      " + x + "\n"
-        return new_text
+        lines=text.split("\n")
+        new_text="    +--"+lines[0]+"\n"
+        for x in lines[1:] :
+            new_text+=("       "+x)+"\n"
+        return (new_text)
 
     def __str__(self):
         """
@@ -54,9 +54,9 @@ class Node:
         if self.is_root:
             text = f"root [feature={self.feature}, threshold={self.threshold}]"
         else:
-            text = f"node [feature={self.feature}, threshold={self.threshold}]"
+            text = f"-> node [feature={self.feature}, threshold={self.threshold}]"
         if self.is_leaf:
-            return f"-> leaf [value={self.value}]"
+            return f"    +---> leaf [value={self.value}]"
         else:
             left_text = self.left_child_add_prefix(left_text)
             right_text = self.right_child_add_prefix(right_text)
@@ -78,7 +78,7 @@ class Leaf(Node):
 
     def __str__(self):
         """Return the value of the leaf node"""
-        return f"-> leaf [value={self.value}]"
+        return (f"-> leaf [value={self.value}]")
 
 
 class Decision_Tree:
