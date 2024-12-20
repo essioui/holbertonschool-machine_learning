@@ -26,7 +26,7 @@ class Node:
         """
         Add a prefix to the left child text
         """
-        lines=text.split("\n")
+        lines=text.strip().split("\n")
         new_text="    +--"+lines[0]+"\n"
         for x in lines[1:] :
             new_text+=("    |  "+x)+"\n"
@@ -36,7 +36,7 @@ class Node:
         """
         Add a prefix to the right child text
         """
-        lines=text.split("\n")
+        lines=text.strip().split("\n")
         new_text="    +--"+lines[0]+"\n"
         for x in lines[1:] :
             new_text+=("       "+x)+"\n"
