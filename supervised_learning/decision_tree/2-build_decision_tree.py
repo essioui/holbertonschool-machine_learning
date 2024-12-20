@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 """Defines Let's print our Tree"""
+
+
 class Node:
     """
     Structure of decision tree
@@ -24,22 +26,22 @@ class Node:
 
     def left_child_add_prefix(self, text):
         """
-        Add a prefix to the left child text
+         Add a prefix to the left child text
         """
-        lines=text.strip().split("\n")
-        new_text="    +--"+lines[0]+"\n"
-        for x in lines[1:] :
-            new_text+=("    |  "+x)+"\n"
+        lines = text.strip().split("\n")
+        new_text = "    +--"+lines[0]+"\n"
+        for x in lines[1:]:
+            new_text += ("    |  "+x)+"\n"
         return (new_text)
 
     def right_child_add_prefix(self, text):
         """
         Add a prefix to the right child text
         """
-        lines=text.strip().split("\n")
-        new_text="    +--"+lines[0]+"\n"
-        for x in lines[1:] :
-            new_text+=("       "+x)+"\n"
+        lines = text.strip().split("\n")
+        new_text = "    +--"+lines[0]+"\n"
+        for x in lines[1:]:
+            new_text += ("       "+x)+"\n"
         return (new_text)
 
     def __str__(self):
@@ -54,7 +56,8 @@ class Node:
         if self.is_root:
             text = f"root [feature={self.feature}, threshold={self.threshold}]"
         else:
-            text = f"-> node [feature={self.feature}, threshold={self.threshold}]"
+            text = (f"-> node[feature={self.feature},
+                    threshold={self.threshold}]")
         if self.is_leaf:
             return f"    +---> leaf [value={self.value}]"
         else:
