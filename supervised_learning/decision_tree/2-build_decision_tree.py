@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Defines Let's print our Tree"""
+"""
+Defines Let's print our Tree
+Classes:
+    Node: no leaf in tree
+    Leaf: leaf node and inherit from Node
+    Decision_Tree: main clas
+"""
 
 
 class Node:
@@ -85,6 +91,10 @@ class Leaf(Node):
 
 
 class Decision_Tree:
+    """
+    Decision tree of classification or regression
+    Print tree
+    """
     def __init__(self, root=None):
         """
         Initialize a decision tree with a root node
