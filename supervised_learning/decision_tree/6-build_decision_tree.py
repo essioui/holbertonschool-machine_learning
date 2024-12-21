@@ -146,6 +146,7 @@ class Decision_Tree:
         return leaves
 
     def update_predict(self):
+        """omputes the prediction"""
         self.update_bounds()
         leaves = self.get_leaves()
         for leaf in leaves:
