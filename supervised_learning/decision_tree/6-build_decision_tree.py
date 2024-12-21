@@ -103,7 +103,7 @@ class Leaf(Node):
         """
         Placeholder for updating any indicator related to the leaf.
         """
-        print(f"Updating indicator for leaf with value {self.value}")
+        pass
 
 
 class Decision_Tree:
