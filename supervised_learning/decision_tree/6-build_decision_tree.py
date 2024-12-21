@@ -73,6 +73,9 @@ class Node:
             return f"{text}\n{left_text}{right_text}"
 
     def pred(self, x):
+        """
+        Predict the value for a single input using the node's children.
+        """
         if x[self.feature] > self.threshold:
             return self.left_child.pred(x)
         else:
