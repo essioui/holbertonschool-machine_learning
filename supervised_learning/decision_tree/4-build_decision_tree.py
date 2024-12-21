@@ -1,10 +1,24 @@
 #!/usr/bin/env python3
 """
+Towards the predict function (2) : the update_bounds method
+Classes:
+    Node: no leaf in tree
+    Leaf: leaf node and inherit from Node
+    Decision_Tree: main clas
 """
 import numpy as np
 
 
 class Node:
+    """
+    Structure of decision tree
+    Attributes:
+        feature: the property used for partition
+        threshold: build nodes
+        left_child, right_child: branches from nodes
+        is_leaf: if the node is a leaf
+        depth: depth of tree
+    """
     def __init__(self, feature=None, threshold=None, left_child=None,
                  right_child=None, is_root=False, depth=0):
         self.feature = feature
@@ -32,6 +46,9 @@ class Node:
         return leaves
 
     def update_bounds_below(self):
+        """
+        Update the bounds (lower and upper) for all nodes below this node.
+        """
         if self.is_root:
             self.upper = {0: np.inf}
             self.lower = {0: -1 * np.inf}
@@ -55,6 +72,9 @@ class Node:
 
 
 class Leaf(Node):
+    """
+    A leaf node in a decision tree inheriting from class Node
+    """
     def __init__(self, value, depth=None):
         super().__init__()
         self.value = value
@@ -62,10 +82,16 @@ class Leaf(Node):
         self.depth = depth
 
     def update_bounds_below(self):
+        """
+        Leaves do not have child nodes to propagate bounds.
+        """
         pass
 
 
 class Decision_Tree():
+    """
+    Decision tree of classification or regression
+    """
     def __init__(self, max_depth=10, min_pop=1,
                  seed=0, split_criterion="random", root=None):
         self.rng = np.random.default_rng(seed)
@@ -87,4 +113,5 @@ class Decision_Tree():
         return self.root.get_leaves_below()
 
     def update_bounds(self):
+        """Update the bounds"""
         self.root.update_bounds_below()
