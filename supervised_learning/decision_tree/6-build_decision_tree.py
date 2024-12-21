@@ -128,6 +128,9 @@ class Decision_Tree:
         return self.root.__str__()
 
     def pred(self, x):
+        """
+        Predict the value for a single input using the node's children.
+        """
         return self.root.pred(x)
 
     def update_bounds(self):
