@@ -134,6 +134,7 @@ class Decision_Tree:
         return self.root.pred(x)
 
     def update_bounds(self):
+        """Update the bounds (lower and upper)"""
         pass
 
     def get_leaves(self):
@@ -143,6 +144,7 @@ class Decision_Tree:
         leaves = []
 
         def traverse(node):
+            """Travese"""
             if node.is_leaf:
                 leaves.append(node)
             else:
