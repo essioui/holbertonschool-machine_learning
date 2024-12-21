@@ -100,6 +100,9 @@ class Leaf(Node):
         return (f"-> leaf [value={self.value}]")
 
     def pred(self, x):
+        """
+        Predict the value for a single input using the node's children.
+        """
         return self.value
 
     def update_indicator(self):
