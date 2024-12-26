@@ -137,11 +137,11 @@ class Decision_Tree():
 
         if verbose == 1:
             print(f"""
-Training finished.
-    - Depth                     : { self.depth()       }
-    - Number of nodes           : { self.count_nodes() }
-    - Number of leaves          : { self.count_nodes(only_leaves=True) }
-    - Accuracy on training data : { self.accuracy(self.explanatory,self.target)}""")
+    Training finished.
+        - Depth                     : { self.depth()       }
+        - Number of nodes           : { self.count_nodes() }
+        - Number of leaves          : { self.count_nodes(only_leaves=True) }
+        - Accuracy on training data : { self.accuracy(self.explanatory,self.target)}""")
 
     def fit_node(self, node):
         """
