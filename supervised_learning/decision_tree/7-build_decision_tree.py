@@ -257,18 +257,12 @@ f"""  Training finished.
         right_depth = 0
 
         if node.left_child is not None:
-            left_depth = self.depth(node.left_child)
+            left_depth = self.max_depth(node.left_child)
 
         if node.right_child is not None:
-            right_depth = self.depth(node.right_child)
+            right_depth = self.max_depth(node.right_child)
 
         return max(left_depth, right_depth) + 1
-
-    def count_nodes(self, only_leaves=False):
-        """
-        calculate nodes
-        """
-        return self.root.count_nodes(only_leaves)
 
     def pred(self, x):
         """
@@ -284,11 +278,11 @@ f"""  Training finished.
 
     def count_nodes(self, only_leaves=False):
         """
-        append function count_node from class Node
+        append function count_nodes from class Node
         """
         if self.root:
             return self.root.count_nodes(only_leaves)
-        return 0
+        return 0 
 
     def accuracy(self, test_explanatory, test_target):
         """
