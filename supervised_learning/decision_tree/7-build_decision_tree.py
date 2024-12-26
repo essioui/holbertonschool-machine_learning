@@ -262,7 +262,7 @@ f"""  Training finished.
         if node.right_child is not None:
             right_depth = self.depth(node.right_child)
 
-        return max(left_depth, right_depth) + 1
+        return max(left_depth, right_depth)
 
     def count_nodes(self, only_leaves=False):
         """
