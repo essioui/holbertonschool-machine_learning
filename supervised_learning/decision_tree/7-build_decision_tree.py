@@ -91,46 +91,15 @@ class Node:
             The number of nodes in the subtree.
         """
         if only_leaves:
-            # Count leaves in both children
             return (
                 self.left_child.count_nodes_below(only_leaves=True) +
                 self.right_child.count_nodes_below(only_leaves=True)
             )
         else:
-            # Count all nodes in the subtree
             return (
                 1 + self.left_child.count_nodes_below(only_leaves=False) +
                 self.right_child.count_nodes_below(only_leaves=False)
             )
-
-    def __str__(self):
-        """
-        Provides a string representation of the node, including its children.
-
-        Returns:
-        str
-            A formatted string representing the subtree rooted at this node.
-        """
-        if self.is_root:
-            result = (
-                f"root [feature={self.feature}, threshold={self.threshold}]\n"
-            )
-        else:
-            result = (
-                f"node [feature={self.feature}, threshold={self.threshold}]\n"
-            )
-
-        # Add left child with prefix
-        if self.left_child:
-            left_str = self.left_child.__str__()
-            result += left_child_add_prefix(left_str)
-
-        # Add right child with prefix
-        if self.right_child:
-            right_str = self.right_child.__str__()
-            result += right_child_add_prefix(right_str)
-
-        return result
 
     def get_leaves_below(self):
         """
@@ -154,7 +123,6 @@ class Node:
         for each node and its children based on the feature thresholds.
         """
         if self.is_root:
-            # Initialize bounds at the root
             self.upper = {0: np.inf}
             self.lower = {0: -np.inf}
 
@@ -162,16 +130,15 @@ class Node:
         if self.left_child:
             self.left_child.lower = self.lower.copy()
             self.left_child.upper = self.upper.copy()
-            # Update upper bound for the feature
+            
             self.left_child.lower[self.feature] = self.threshold
 
         if self.right_child:
             self.right_child.lower = self.lower.copy()
             self.right_child.upper = self.upper.copy()
-            # Update lower bound for the feature
+            
             self.right_child.upper[self.feature] = self.threshold
 
-        # Recursively update bounds for children
         for child in [self.left_child, self.right_child]:
             if child:
                 child.update_bounds_below()
@@ -318,7 +285,6 @@ class Leaf(Node):
         Leaf nodes inherit bounds from their
         parent nodes and do not propagate further.
         """
-        # Bounds are inherited from the parent node and remain unchanged
         pass
 
     def get_leaves_below(self):
@@ -458,17 +424,12 @@ class Decision_Tree():
         """
         Updates the predict function for efficient batch predictions.
         """
-        # Update bounds for each node
         self.update_bounds()
-
-        # Get all the leaves
         leaves = self.get_leaves()
 
-        # Update indicator for each leaf and store its contribution
         for leaf in leaves:
             leaf.update_indicator()
 
-        # Define the efficient predict function
         self.predict = lambda A: np.sum(
             [leaf.indicator(A) * leaf.value for leaf in leaves], axis=0
         )
@@ -522,7 +483,6 @@ class Decision_Tree():
         verbose : int, optional
             If set to 1, prints training details (default is 0).
         """
-        # Set the split criterion method
         if self.split_criterion == "random":
             self.split_criterion = self.random_split_criterion
         else:
