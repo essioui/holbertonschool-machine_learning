@@ -3,45 +3,6 @@
 import numpy as np
 
 
-def left_child_add_prefix(text):
-    """
-    Adds a prefix to each line of the text to
-    indicate it is the left child in the tree structure.
-
-    Parameters:
-    text : str
-        The text to which the prefix will be added.
-
-    Returns:
-    str
-        The text with the left child prefix added to each line.
-    """
-    lines = text.split("\n")
-    new_text = "    +--" + lines[0] + "\n"
-    for x in lines[1:]:
-        new_text += ("    |  " + x) + "\n"
-    return new_text
-
-
-def right_child_add_prefix(text):
-    """
-    Adds a prefix to each line of the text to indicate
-    it is the right child in the tree structure.
-
-    Parameters:
-    text : str
-    The text to which the prefix will be added.
-    Returns:
-    str
-        The text with the right child prefix added to each line.
-    """
-    lines = text.split("\n")
-    new_text = "    +--" + lines[0] + "\n"
-    for x in lines[1:]:
-        new_text += ("       " + x) + "\n"
-    return new_text
-
-
 class Node:
     """
     A class representing a node in a decision tree.
