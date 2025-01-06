@@ -101,3 +101,21 @@ class NeuralNetwork:
         cost_value = self.cost(Y, A)
 
         return prediction, cost_value
+
+    def gradient_descent(self, X, Y, A1, A2, alpha=0.05):
+        """
+        """
+        m = Y.shape[1]
+
+        dz2 = A2 - Y
+        dW2 = np.dot(dz2, A1.T) / m
+        db2 = np.sum(dz2, axis=1, keepdims=True) / m
+
+        dz1 = np.dot(self.__W2.T, dz2) * A1 * (1 - A1)
+        dW1 = np.dot(dz1, X.T) / m
+        db1 = np.sum(dz1, axis=1, keepdims=True) / m
+
+        self.__W1 -= alpha * dW1
+        self.__b1 -= alpha * db1
+        self.__W2 -= alpha * dW2
+        self.__b2 -= alpha * db2
