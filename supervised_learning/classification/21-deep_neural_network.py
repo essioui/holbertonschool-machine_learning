@@ -99,8 +99,8 @@ class DeepNeuralNetwork:
 
             dW = (1 / m) * np.dot(cache[f"A{s - 1}"], dz.T)
             db = (1 / m) * np.sum(dz, axis=1, keepdims=True)
-            dz = np.dot(self.__weights[f"W{s}"].T, dz) * (cache[f"A{s - 1}"] * (1 - cache[f"A{s - 1}"]))
+            dz = np.dot(self.__weights[f"W{s}"].T, dz) * (
+                cache[f"A{s - 1}"] * (1 - cache[f"A{s - 1}"]))
 
             self.__weights[f"W{s}"] -= (alpha * dW).T
             self.__weights[f"b{s}"] -= alpha * db
-
