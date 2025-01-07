@@ -28,10 +28,12 @@ class DeepNeuralNetwork:
         self.cache = {}
         self.weights = {}
 
+        prev_nodes = nx
         for m in range(self.L):
-            prev_nodes = nx if m == 0 else layers[m - 1]
 
             self.weights[f"W{m + 1}"] = (np.random.randn(layers[m],
                                                      prev_nodes) *
                                      np.sqrt(2 / prev_nodes))
             self.weights[f"b{m + 1}"] = np.zeros((layers[m], 1))
+
+            prev_nodes = layers[m]
