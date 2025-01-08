@@ -35,10 +35,10 @@ class DeepNeuralNetwork:
         for m in range(1, self.L + 1):
             prev_nodes = nx if m == 1 else layers[m - 2]
 
-            self.weights[f"W{m}"] = (np.random.randn(layers[m - 1],
-                                     prev_nodes) *
-                                     np.sqrt(2 / prev_nodes))
-            self.weights[f"b{m}"] = np.zeros((layers[m - 1], 1))
+            self.__weights[f"W{m}"] = (np.random.randn(layers[m - 1],
+                                        prev_nodes) *
+                                        np.sqrt(2 / prev_nodes))
+            self.__weights[f"b{m}"] = np.zeros((layers[m - 1], 1))
 
     @property
     def L(self):
@@ -144,14 +144,19 @@ class DeepNeuralNetwork:
                 iteration_list.append(i)
             self.gradient_descent(Y, self.__cache, alpha)
 
-
+        if graph:
+            plt.plot(iteration_list, costs, 'b-')
+            plt.xlabel("iteration")
+            plt.ylabel("cost")
+            plt.title("Training Cost")
+            plt.show()
         return self.evaluate(X, Y)
 
     def save(self, filename):
         """
         Saves the instance object to a file in pickle format
         """
-        if filename[-4:] != '.pkl':
+        if not filename.endswith('.pkl'):
             filename += '.pkl'
         with open(filename, 'wb') as file:
             pickle.dump(self, file)
@@ -166,4 +171,3 @@ class DeepNeuralNetwork:
 
         with open(filename, 'rb') as f:
             return pickle.load(f)
-        
