@@ -36,10 +36,10 @@ class DeepNeuralNetwork:
         for m in range(1, self.L + 1):
             prev_nodes = nx if m == 1 else layers[m - 2]
 
-            self.weights[f"W{m}"] = (np.random.randn(layers[m - 1],
+            self.__weights[f"W{m}"] = (np.random.randn(layers[m - 1],
                                      prev_nodes) *
                                      np.sqrt(2 / prev_nodes))
-            self.weights[f"b{m}"] = np.zeros((layers[m - 1], 1))
+            self.__weights[f"b{m}"] = np.zeros((layers[m - 1], 1))
 
     @property
     def L(self):
@@ -134,7 +134,7 @@ class DeepNeuralNetwork:
         iteration_list = []
 
         for i in range(iterations + 1):
-            A1, A2 = self.forward_prop(X)
+            self.forward_prop(X)
             _, cost = self.evaluate(X, Y)
 
             if verbose and i % step == 0:
