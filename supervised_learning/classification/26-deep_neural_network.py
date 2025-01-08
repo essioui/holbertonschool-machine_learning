@@ -2,7 +2,6 @@
 """deep_neural_network"""
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.pyplot as plt
 import pickle
 import os
 
@@ -145,12 +144,7 @@ class DeepNeuralNetwork:
                 iteration_list.append(i)
             self.gradient_descent(Y, self.__cache, alpha)
 
-        if graph:
-            plt.plot(iteration_list, costs, 'b-')
-            plt.xlabel("iteration")
-            plt.ylabel("cost")
-            plt.title("Training Cost")
-            plt.show()
+
         return self.evaluate(X, Y)
 
     def save(self, filename):
