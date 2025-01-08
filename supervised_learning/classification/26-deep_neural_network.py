@@ -138,6 +138,8 @@ class DeepNeuralNetwork:
 
             if verbose and i % step == 0:
                 print(f"Cost after {i} iterations: {cost}")
+            else:
+                pass
 
             if graph and i % step == 0:
                 costs.append(cost)
