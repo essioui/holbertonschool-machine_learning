@@ -4,6 +4,7 @@ returns two placeholders, x and y, for the neural network
 use the old version of tensorflow tf.compat.v1
 """
 import tensorflow.compat.v1 as tf
+tf.disable_eager_execution()
 
 
 def create_placeholders(nx, classes):
