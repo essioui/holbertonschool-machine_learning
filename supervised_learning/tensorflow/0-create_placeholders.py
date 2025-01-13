@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """
 returns two placeholders, x and y, for the neural network
+use the old version of tensorflow tf.compat.v1
 """
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 
 def create_placeholders(nx, classes):
