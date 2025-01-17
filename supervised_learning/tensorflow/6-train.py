@@ -2,6 +2,7 @@
 """
 This modules builds, trains, and saves a neural network classifier
 """
+import os
 import tensorflow.compat.v1 as tf
 tf.disable_eager_execution
 
@@ -29,6 +30,12 @@ def train(X_train, Y_train, X_valid, Y_valid, layer_sizes, activations,
     Returns:
         the path where the model was saved
     """
+    # Validate inputs
+    assert len(layer_sizes) == len(activations), "Mismatch in layer sizes and activations."
+
+    # Ensure reproducibility
+    tf.set_random_seed(0)
+    
     # Initialize placeholders and build the network
     x, y = create_placeholders(X_train.shape[1], Y_train.shape[1])
     y_pred = forward_prop(x, layer_sizes, activations)
@@ -47,6 +54,9 @@ def train(X_train, Y_train, X_valid, Y_valid, layer_sizes, activations,
     # Initialize variables
     init = tf.global_variables_initializer()
 
+    # Ensure save path directory exists
+    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+
     # Start training session
     with tf.Session() as sess:
         sess.run(init)
@@ -62,13 +72,14 @@ def train(X_train, Y_train, X_valid, Y_valid, layer_sizes, activations,
                 [loss, accuracy], feed_dict=feed_dict_valid)
 
             # Print progress
-            if i % 100 == 0 or i == iterations:
+            if i % 100 == 0:
                 print(f"After {i} iterations:")
                 print(f"\tTraining Cost: {train_cost}")
                 print(f"\tTraining Accuracy: {train_accuracy}")
                 print(f"\tValidation Cost: {valid_cost}")
                 print(f"\tValidation Accuracy: {valid_accuracy}")
 
+        tf.set_random_seed(0)
         # Save the model
         saver = tf.train.Saver()
         saved_path = saver.save(sess, save_path)
