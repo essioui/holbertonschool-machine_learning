@@ -34,4 +34,3 @@ if __name__ == '__main__':
     save_path = train(X_train, Y_train_oh, X_valid, Y_valid_oh, layer_sizes,
                       activations, alpha, iterations, save_path="./model.ckpt")
     print("Model saved in path: {}".format(save_path))
-    
