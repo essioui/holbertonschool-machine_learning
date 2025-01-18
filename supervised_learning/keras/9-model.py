@@ -15,7 +15,6 @@ def save_model(network, filename):
         None
     """
     network.save(filename)
-    print(f"Model saved to {filename}")
 
 
 def load_model(filename):
