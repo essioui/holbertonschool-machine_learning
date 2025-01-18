@@ -26,5 +26,4 @@ def load_model(filename):
         the loaded model
     """
     model = K.models.load_model(filename)
-    print(f"Model loaded to {filename}")
     return model
