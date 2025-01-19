@@ -26,11 +26,11 @@ def save_weights(network, filename, save_format='keras'):
         with open(filename, 'w') as f:
             for weight in weights:
                 # Save each weight matrix as a string representation of a list
-                f.write(f"{weight.tolist()}\n")  
-        print(f"Weights saved to {filename} in 'keras' format.")
+                f.write(f"{weight.tolist()}\n")
     
     else:
         raise ValueError(f"Unsupported save format: {save_format}")
+    return None
 
 
 def load_weights(network, filename, load_format='keras'):
@@ -60,4 +60,3 @@ def load_weights(network, filename, load_format='keras'):
 
     # Load weights into the network
     network.set_weights(weights)
-    print(f"Weights loaded from {filename} in '{load_format}' format.")
