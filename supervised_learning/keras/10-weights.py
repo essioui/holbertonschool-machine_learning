@@ -36,7 +36,7 @@ def load_weights(network, filename):
     # Load the weights from the file
     with open(filename, 'r') as f:
         for line in f:
-            weights.append(eval(line.strip()))  # Convert each line back to a list
-    # Convert weights back to their original data format (e.g., tensors)
-    network.set_weights([K.backend.variable(w) for w in weights])
+            weights.append(K.backend.constant(eval(line.strip())))  # Convert each line back to a tensor safely using constant
+    # Load weights into the network
+    network.set_weights(weights)
     print(f"Weights loaded from {filename}.")
