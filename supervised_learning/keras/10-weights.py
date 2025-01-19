@@ -1,43 +1,42 @@
 #!/usr/bin/env python3
 """
-Module defines functions to save and load a model's weights
+Module defines functions to save and load a model's weights using only built-in Python features
 """
 import tensorflow.keras as K
-import numpy as np
 
 
-def save_weights(network, filename, save_format='keras'):
+def save_weights(network, filename):
     """
-    Saves a model’s weights to a file or model.
+    Saves a model's weights using `get_weights`.
     Args:
         network: the model whose weights should be saved
-        filename: the path of the file that the weights should be saved to
-        save_format: format of the saved file
-    """
-    if save_format == 'keras':
-        network.save(filename)
-    elif save_format == 'npy':
-        weights = network.get_weights()
-        np.save(filename, weights)
-    else:
-        raise ValueError("Unsupported save format. Choose 'keras' or 'npy'.")
-
-
-def load_weights(network, filename, save_format='keras'):
-    """
-    Loads a model’s weights from a file
-    Args:
-        network: the model to which the weights should be loaded
-        filename: the path of the file that the weights should be loaded from
-        save_format:format in which the weights were saved, default is 'keras'
+        filename: the path of the file to save the weights
     Returns:
         None
     """
-    if save_format == 'keras':
-        network.load_weights(filename)
-    elif save_format == 'npy':
-        weights = np.load(filename, allow_pickle=True)
-        network.set_weights(weights)
-    else:
-        raise ValueError("Unsupported load format. Choose 'keras' or 'npy'.")
-    return None
+    weights = network.get_weights()  # Get the model's weights
+    # Save the weights as nested lists
+    with open(filename, 'w') as f:
+        for weight in weights:
+            # Save each weight's data and shape
+            f.write(f"{weight.tolist()}\n")  # Convert weights to list and save
+    print(f"Weights saved to {filename}.")
+
+
+def load_weights(network, filename):
+    """
+    Loads a model's weights using `set_weights`.
+    Args:
+        network: the model to which the weights should be loaded
+        filename: the path of the file to load the weights from
+    Returns:
+        None
+    """
+    weights = []
+    # Load the weights from the file
+    with open(filename, 'r') as f:
+        for line in f:
+            weights.append(eval(line.strip()))  # Convert each line back to a list
+    # Convert weights back to their original data format (e.g., tensors)
+    network.set_weights([K.backend.variable(w) for w in weights])
+    print(f"Weights loaded from {filename}.")
