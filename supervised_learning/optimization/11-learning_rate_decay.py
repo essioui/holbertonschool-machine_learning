@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Defines module Adam Upgraded
+Defines module Learning Rate Decay
 """
 import numpy as np
 
