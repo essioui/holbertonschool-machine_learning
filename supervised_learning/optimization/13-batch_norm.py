@@ -26,6 +26,6 @@ def batch_norm(Z, gamma, beta, epsilon):
 
     Z_normalized = (Z - mean) / np.sqrt(variance + epsilon)
 
-    Z_batch_norm = gamma * Z_normalized * beta
+    Z_batch_norm = gamma * Z_normalized + beta
 
     return Z_batch_norm
