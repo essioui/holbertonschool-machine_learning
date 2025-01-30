@@ -26,10 +26,13 @@ def l2_reg_gradient_descent(Y, weights, cache, alpha, lambtha, L):
     for layer in range(L, 0, -1):
         A_prev = cache[f'A{layer - 1}'] if layer > 1 else cache['A0']
         W = weights[f'W{layer}']
+        b = weights[f'b{layer}']
 
         dW = (np.dot(dz_softmax, A_prev.T) / m) + ((lambtha / m) * W)
+        db = np.sum(dz_softmax, axis=1, keepdims=True) / m
 
         weights[f'W{layer}'] -= alpha * dW
+        weights[f'b{layer}'] -= alpha * db
 
         if layer > 1:
             dA_prev = np.dot(W.T, dz_softmax)
