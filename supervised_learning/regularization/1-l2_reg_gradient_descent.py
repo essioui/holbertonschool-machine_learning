@@ -28,6 +28,6 @@ def l2_reg_gradient_descent(Y, weights, cache, alpha, lambtha, L):
         db = np.sum(dZ, axis=1, keepdims=True) / m
         d_tanh = 1 - np.square(A_prev)
         dZ = np.dot(weights[f'W{layer}'].T, dZ) * d_tanh
-        reg_l2 = (1 -lambtha * alpha / m)
+        reg_l2 = (1 - lambtha * alpha / m)
         weights[f'W{layer}'] = reg_l2 * weights[f'W{layer}'] - alpha * dW
         weights[f'b{layer}'] -= alpha * db
