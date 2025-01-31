@@ -20,20 +20,14 @@ def l2_reg_gradient_descent(Y, weights, cache, alpha, lambtha, L):
         L is the number of layers of the network
     """
     m = Y.shape[1]
-    act_last_layer = cache[f'A{L}']
-    dz_softmax = act_last_layer - Y
+    dZ = cache[f'A{L}'] - Y
 
     for layer in range(L, 0, -1):
         A_prev = cache[f'A{layer - 1}'] if layer > 1 else cache['A0']
-        W = weights[f'W{layer}']
-        b = weights[f'b{layer}']
-
-        dW = (np.dot(dz_softmax, A_prev.T) / m) + ((lambtha / m) * W)
-        db = np.sum(dz_softmax, axis=1, keepdims=True) / m
-
-        weights[f'W{layer}'] -= alpha * dW
+        dW = np.dot(dZ, A_prev.T) / m
+        db = np.sum(dZ, axis=1, keepdims=True) / m
+        d_tanh = 1 - np.square(A_prev)
+        dZ = np.dot(weights[f'W{layer}'].T, dZ) * d_tanh
+        reg_l2 = (1 -lambtha * alpha / m)
+        weights[f'W{layer}'] = reg_l2 * weights[f'W{layer}'] - alpha * dW
         weights[f'b{layer}'] -= alpha * db
-
-        if layer > 1:
-            dA_prev = np.dot(W.T, dz_softmax)
-            dz_softmax = dA_prev * (1 - A_prev ** 2)
