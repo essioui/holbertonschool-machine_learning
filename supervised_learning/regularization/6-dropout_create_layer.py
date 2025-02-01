@@ -21,9 +21,6 @@ def dropout_create_layer(prev, n, activation, keep_prob, training=True):
 
     if training:
 
-        dropout_mask = tf.cast(tf.random.uniform(
-            tf.shape(layer)) < keep_prob, tf.float32)
-
-        layer = tf.multiply(layer, dropout_mask) / keep_prob
+        layer = tf.nn.dropout(layer, rate=1 - keep_prob)
 
     return layer
