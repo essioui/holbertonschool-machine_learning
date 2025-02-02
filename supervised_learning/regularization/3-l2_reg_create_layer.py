@@ -17,9 +17,16 @@ def l2_reg_create_layer(prev, n, activation, lambtha):
     Returns:
         the output of the new layer
     """
-    regularizer = tf.keras.regularizers.l2(lambtha)
+    init_weights = tf.keras.initializers.VarianceScaling(
+            scale=2.0, mode="fan_avg"
+            )
+    l2_regularizer = tf.keras.regularizers.L2(lambtha)
 
-    tensor = tf.keras.layers.Dense(units=n, activation=activation,
-                                   kernel_regularizer=regularizer)
+    layer = tf.keras.layers.Dense(
+        units=n,
+        activation=activation,
+        kernel_initializer=init_weights,
+        kernel_regularizer=l2_regularizer
+    )
 
-    return tensor(prev)
+    return layer(prev)
