@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Module define Valid Convolution
+Module define Same Convolution
 """
 import numpy as np
 
