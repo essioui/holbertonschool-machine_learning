@@ -34,8 +34,8 @@ def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
         raise ValueError("number channels in image must match in kernel")
 
     if padding == 'same':
-        ph = ((h - 1) * sh + kh - h) // 2
-        pw = ((w - 1) * sw + kw - w) // 2
+        ph = (((h - 1) * sh + kh - h) // 2) + 1
+        pw = (((w - 1) * sw + kw - w) // 2) + 1
     elif padding == 'valid':
         ph, pw = 0, 0
     elif isinstance(padding, tuple):
@@ -46,10 +46,10 @@ def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
     new_h = (h + 2 * ph - kh) // sh + 1
     new_w = (w + 2 * pw - kw) // sw + 1
 
+    output = np.zeros((m, new_h, new_w))
+
     padded_images = np.pad(images, ((0, 0), (ph, ph),
                                     (pw, pw), (0, 0)), mode='constant')
-
-    output = np.zeros((m, new_h, new_w))
 
     for i in range(new_h):
         for j in range(new_w):
