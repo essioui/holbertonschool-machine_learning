@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Task 3. Projection Block"""
-from tensorflow.keras import layers, initializers
+from keras import layers, initializers
 
 def projection_block(A_prev, filters, s=2):
     """
