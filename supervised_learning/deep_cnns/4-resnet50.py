@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Module define ResNet-50"""
+"""Task 4: ResNet-50"""
 from tensorflow import keras as K
 identity_block = __import__('2-identity_block').identity_block
 projection_block = __import__('3-projection_block').projection_block
@@ -63,4 +63,3 @@ def resnet50():
     model = K.models.Model(inputs=input_layer, outputs=dense)
 
     return model
-
