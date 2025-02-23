@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Task 3. Projection Block"""
-import tensorflow as tf
-from tensorflow.keras.layers import Conv2D, BatchNormalization, ReLU, Add
+from tensorflow.keras import layers, initializers
 
 def projection_block(A_prev, filters, s=2):
     """
@@ -19,26 +18,25 @@ def projection_block(A_prev, filters, s=2):
     
     # Main path
     # First 1x1 convolution (with stride s)
-    X = Conv2D(F11, (1, 1), strides=(s, s), padding='valid', kernel_initializer=tf.keras.initializers.HeNormal(seed=0))(A_prev)
-    X = BatchNormalization(axis=3)(X)
-    X = ReLU()(X)
+    X = layers.Conv2D(F11, (1, 1), strides=(s, s), padding='valid', kernel_initializer=initializers.HeNormal(seed=0))(A_prev)
+    X = layers.BatchNormalization(axis=3)(X)
+    X = layers.ReLU()(X)
     
     # Second 3x3 convolution
-    X = Conv2D(F3, (3, 3), strides=(1, 1), padding='same', kernel_initializer=tf.keras.initializers.HeNormal(seed=0))(X)
-    X = BatchNormalization(axis=3)(X)
-    X = ReLU()(X)
+    X = layers.Conv2D(F3, (3, 3), strides=(1, 1), padding='same', kernel_initializer=initializers.HeNormal(seed=0))(X)
+    X = layers.BatchNormalization(axis=3)(X)
+    X = layers.ReLU()(X)
     
     # Third 1x1 convolution
-    X = Conv2D(F12, (1, 1), strides=(1, 1), padding='valid', kernel_initializer=tf.keras.initializers.HeNormal(seed=0))(X)
-    X = BatchNormalization(axis=3)(X)
+    X = layers.Conv2D(F12, (1, 1), strides=(1, 1), padding='valid', kernel_initializer=initializers.HeNormal(seed=0))(X)
+    X = layers.BatchNormalization(axis=3)(X)
     
     # Shortcut path
-    shortcut = Conv2D(F12, (1, 1), strides=(s, s), padding='valid', kernel_initializer=tf.keras.initializers.HeNormal(seed=0))(A_prev)
-    shortcut = BatchNormalization(axis=3)(shortcut)
+    shortcut = layers.Conv2D(F12, (1, 1), strides=(s, s), padding='valid', kernel_initializer=initializers.HeNormal(seed=0))(A_prev)
+    shortcut = layers.BatchNormalization(axis=3)(shortcut)
     
     # Add the main path and shortcut
-    output = Add()([X, shortcut])
-    output = ReLU()(output)
+    output = layers.Add()([X, shortcut])
+    output = layers.ReLU()(output)
     
     return output
-
