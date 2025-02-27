@@ -65,8 +65,8 @@ class Yolo:
 
             x1 = (bx - (bw / 2)) * image_width
             y1 = (by - (bh / 2)) * image_height
-            x2 = (bx - (bw / 2)) * image_width
-            y2 = (by - (bh / 2)) * image_height
+            x2 = (bx + (bw / 2)) * image_width
+            y2 = (by + (bh / 2)) * image_height
 
             processed_boxes = np.stack([x1, y1, x2, y2], axis=-1)
 
