@@ -32,50 +32,50 @@ class Yolo:
 
     def process_outputs(self, outputs, image_size):
         """
-        this function has return from DarkNet:
-        boxes:
-            a list of shape (grid_height, grid_width, anchor_boxes, 4)
-        box_confidences:
-            a list of shape (grid_height, grid_width, anchor_boxes, 1)
-        box_class_probs:
-            a list of shape (grid_height, grid_width, anchor_boxes, classes)
+        Processes the outputs from the YOLO model.
+
+        Args:
+            outputs (List[np.ndarray]): List of arrays model outputs.
+            image_size (Tuple[int, int]): (image_height, image_width).
+
+        Returns:
+            [List[np.ndarray], List[np.ndarray], List[np.ndarray]]:
+                - boxes: List of bounding boxes
+                    (grid_height, grid_width, anchor_boxes, 4).
+                - box_confidences: List of box confidence scores
+                    (grid_height, grid_width, anchor_boxes, 1).
+                - box_class_probs: List of class probability scores
+                    (grid_height, grid_width, anchor_boxes, classes).
         """
-        image_height, image_width = image_size
-        boxes, box_confidences, box_class_probs = [], [], []
+        boxes = []
+        box_confidences = []
+        box_class_probs = []
+        img_h, img_w = image_size
 
-        for i, output in enumerate(outputs):
-            grid_height, grid_width, anchor_boxes, _ = output.shape
-
-            tx_ty = self.sigmoid(output[..., :2])
-            th_tw = np.exp(output[..., 2:4])
-
-            cx = np.tile(np.arange(grid_width).reshape(1, -1, 1),
-                         (grid_height, 1, anchor_boxes))
-            cy = np.tile(np.arange(grid_height).reshape(-1, 1, 1),
-                         (1, grid_width, anchor_boxes))
-
-            bx = (tx_ty[..., 0] + cx) / grid_width
-            by = (tx_ty[..., 1] + cy) / grid_height
-
-            anchor_w = self.anchors[i][:, 0].reshape(1, 1, anchor_boxes)
-            anchor_h = self.anchors[i][:, 1].reshape(1, 1, anchor_boxes)
-
-            bw = (th_tw[..., 0] * anchor_w) / image_width
-            bh = (th_tw[..., 1] * anchor_h) / image_height
-
-            x1 = (bx - (bw / 2)) * image_width
-            y1 = (by - (bh / 2)) * image_height
-            x2 = (bx + (bw / 2)) * image_width
-            y2 = (by + (bh / 2)) * image_height
-
-            processed_boxes = np.stack([x1, y1, x2, y2], axis=-1)
-
-            box_confidence = self.sigmoid(output[..., 4:5])
-
-            box_class_probilities = self.sigmoid(output[..., 5:])
-
-            boxes.append(processed_boxes)
-            box_confidences.append(box_confidence)
-            box_class_probs.append(box_class_probilities)
-
+        for output in outputs:
+            boxes.append(output[..., 0:4])
+            box_confidences.append(self.sigmoid(output[..., 4, np.newaxis]))
+            box_class_probs.append(self.sigmoid(output[..., 5:]))
+        for i, box in enumerate(boxes):
+            gr_h, gr_w, anchors_boxes, _ = box.shape
+            cx = np.indices((gr_h, gr_w, anchors_boxes))[1]
+            cy = np.indices((gr_h, gr_w, anchors_boxes))[0]
+            t_x = box[..., 0]
+            t_y = box[..., 1]
+            t_w = box[..., 2]
+            t_h = box[..., 3]
+            p_w = self.anchors[i, :, 0]
+            p_h = self.anchors[i, :, 1]
+            bx = (self.sigmoid(t_x) + cx) / gr_w
+            by = (self.sigmoid(t_y) + cy) / gr_h
+            bw = (np.exp(t_w) * p_w) / self.model.input.shape[1]
+            bh = (np.exp(t_h) * p_h) / self.model.input.shape[2]
+            tl_x = bx - bw / 2
+            tl_y = by - bh / 2
+            br_x = bx + bw / 2
+            br_y = by + bh / 2
+            box[..., 0] = tl_x * img_w
+            box[..., 1] = tl_y * img_h
+            box[..., 2] = br_x * img_w
+            box[..., 3] = br_y * img_h
         return boxes, box_confidences, box_class_probs
