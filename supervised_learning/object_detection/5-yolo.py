@@ -208,8 +208,7 @@ class Yolo:
         image_shapes = np.array([[img.shape[0],
                                   img.shape[1]] for img in images])
 
-        input_h = self.model.input.shape[2]
-        input_w = self.model.input.shape[1]
+        input_h, input_w = 416, 416
 
         pimages = np.zeros((number_images, input_h, input_w, 3),
                            dtype=np.float32)
