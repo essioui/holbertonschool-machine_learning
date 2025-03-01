@@ -210,8 +210,7 @@ class Yolo:
 
         input_h, input_w = 416, 416
 
-        pimages = np.zeros((number_images, input_h, input_w, 3),
-                           dtype=np.float32)
+        pimages = np.zeros((number_images, input_h, input_w, 3))
 
         for i in range(number_images):
             resized = cv2.resize(images[i], (input_h, input_w),
