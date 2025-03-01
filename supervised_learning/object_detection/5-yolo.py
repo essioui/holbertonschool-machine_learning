@@ -204,18 +204,25 @@ class Yolo:
                 3: number of color channels
             image_shapes: a numpy.ndarray of shape (ni, 2)
         """
-        number_images = len(images)
-        image_shapes = np.array([[img.shape[0],
-                                  img.shape[1]] for img in images])
+        input_w = self.model.input.shape[1]
+        input_h = self.model.input.shape[2]
 
-        input_h, input_w = 416, 416
+        lpimages = []
+        limage_shapes = []
 
-        pimages = np.zeros((number_images, input_h, input_w, 3))
+        for img in images:
 
-        for i in range(number_images):
-            resized = cv2.resize(images[i], (input_h, input_w),
+            img_shape = img.shape[0], img.shape[1]
+            limage_shapes.append(img_shape)
+
+            dimension = (input_w, input_h)
+            resized = cv2.resize(img, dimension,
                                  interpolation=cv2.INTER_CUBIC)
-            normalized = resized / 255
-            pimages[i] = normalized
+
+            pimage = resized / 255
+            lpimages.append(pimage)
+
+        pimages = np.array(lpimages)
+        image_shapes = np.array(limage_shapes)
 
         return pimages, image_shapes
