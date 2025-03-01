@@ -215,7 +215,7 @@ class Yolo:
         for i in range(number_images):
             resized = cv2.resize(images[i], (input_h, input_w),
                                  interpolation=cv2.INTER_CUBIC)
-            normalized = resized / 255.0
+            normalized = resized / 255
             pimages[i] = normalized
 
         return pimages, image_shapes
