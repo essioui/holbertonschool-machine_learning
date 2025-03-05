@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+"""
+Module define Initialize Neural Style Transfer
+"""
 import numpy as np
 import tensorflow as tf
 
