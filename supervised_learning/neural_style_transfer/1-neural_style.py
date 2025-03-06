@@ -4,8 +4,8 @@ Module define Initialize Neural Style Transfer
 """
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras.models import Model
-from tensorflow.keras.applications import VGG19
+Model = tf.keras.models.Model
+VGG19 = tf.keras.applications.VGG19
 
 
 class NST:
