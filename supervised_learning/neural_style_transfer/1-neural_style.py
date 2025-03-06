@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """
-Module define Initialize Neural Style Transfer
+Module to define and initialize Neural Style Transfer (NST).
+This module implements the NST process using a modified VGG19 model,
+where MaxPooling layers are replaced with AveragePooling layers.
 """
 import numpy as np
 import tensorflow as tf
@@ -10,7 +12,8 @@ VGG19 = tf.keras.applications.VGG19
 
 class NST:
     """
-    Neural Style Transfer class
+    Neural Style Transfer (NST) class.
+    This class is responsible for performing NST using a VGG19-based model.
     """
     style_layers = [
         'block1_conv1',
@@ -23,7 +26,13 @@ class NST:
 
     def __init__(self, style_image, content_image, alpha=1e4, beta=1):
         """
-        Initializes NST instance
+        Initializes an NST instance.
+
+        Parameters:
+        - style_image: The style reference image with shape (h, w, 3).
+        - content_image: The content reference image with shape (h, w, 3).
+        - alpha (float): Weight content loss. Must be a non-negative number.
+        - beta (float): Weight style loss. Must be a non-negative number.
         """
         if (not isinstance(style_image, np.ndarray) or
             len(style_image.shape) != 3 or
@@ -52,8 +61,14 @@ class NST:
     @staticmethod
     def scale_image(image):
         """
-        Rescales image pixel values are between 0 and 1
-        and its largest side is 512 pixels.
+        Rescales an image so that its pixel values are between 0 and 1,
+        and its largest side is 512 pixels while preserving the aspect ratio.
+
+        Parameters:
+        - image: The input image to be scaled with shape (h, w, 3).
+
+        Returns:
+        - tf.Tensor: A scaled image tensor with shape (1, new_h, new_w, 3).
         """
         if (not isinstance(image, np.ndarray) or
             len(image.shape) != 3 or
@@ -78,7 +93,10 @@ class NST:
 
     def load_model(self):
         """
-        Loads the VGG19 model
+        Loads the VGG19 model and replaces
+        MaxPooling layers with AveragePooling.
+        modified VGG19 model extracts features from
+        both style and content layers.
         """
         vgg = VGG19(include_top=False, weights='imagenet')
         vgg.trainable = False
