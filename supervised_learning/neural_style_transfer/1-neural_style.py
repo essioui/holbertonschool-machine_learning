@@ -102,4 +102,5 @@ class NST:
 
         outputs = ([modified_model.get_layer(name).output for name in
                     self.style_layers + [self.content_layer]])
-        self.model = Model(inputs=modified_model.input, outputs=outputs)
+        self.model = Model(inputs=modified_model.input,
+                           outputs=outputs, name="model")
