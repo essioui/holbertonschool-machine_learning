@@ -83,6 +83,23 @@ class NST:
         vgg = VGG19(include_top=False, weights='imagenet')
         vgg.trainable = False
 
-        outputs = ([vgg.get_layer(name).output for name in
+        inputs = vgg.input
+        x = inputs
+
+        for layer in vgg.layers[1:]:
+            if isinstance(layer, tf.keras.layers.MaxPool2D):
+
+                x = tf.keras.layers.AveragePooling2D(
+                    pool_size=layer.pool_size,
+                    strides=layer.strides,
+                    padding=layer.padding,
+                    name=layer.name.replace("max", "avg")
+                )(x)
+            else:
+                x = layer.__class__.from_config(layer.get_config())(x)
+
+        modified_model = Model(inputs=inputs, outputs=x)
+
+        outputs = ([modified_model.get_layer(name).output for name in
                     self.style_layers + [self.content_layer]])
-        self.model = Model(inputs=vgg.input, outputs=outputs)
+        self.model = Model(inputs=modified_model.input, outputs=outputs)
