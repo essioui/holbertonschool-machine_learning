@@ -96,7 +96,10 @@ class NST:
                     name=layer.name.replace("max", "avg")
                 )(x)
             else:
-                x = layer.__class__.from_config(layer.get_config())(x)
+                new_layer = layer.__class__.from_config(layer.get_config())
+                new_layer.build(layer.input_shape)
+                new_layer.set_weights(layer.get_weights())
+                x = new_layer(x)
 
         modified_model = Model(inputs=inputs, outputs=x)
 
