@@ -23,55 +23,31 @@ def projection_block(A_prev, filters, s=2):
     projection block (tensor of shape (H/s, W/s, F12))
     """
     F11, F3, F12 = filters
+    he_init = K.initializers.HeNormal(seed=0)
 
-    # He normal initializer with seed=0
-    initializer = K.initializers.HeNormal(seed=0)
-
-    # Main path
-    # First 1x1 convolution
-    conv1 = K.layers.Conv2D(
-        filters=F11,
-        kernel_size=(1, 1),
-        strides=(s, s),
-        padding="valid",
-        kernel_initializer=initializer,
-    )(A_prev)
+    conv1 = (K.layers.Conv2D(F11, (1, 1), strides=s,
+                             padding='valid',
+                             kernel_initializer=he_init)(A_prev))
     bn1 = K.layers.BatchNormalization(axis=3)(conv1)
-    relu1 = K.layers.Activation("relu")(bn1)
+    act1 = K.layers.Activation('relu')(bn1)
 
-    # Second 3x3 convolution
-    conv2 = K.layers.Conv2D(
-        filters=F3,
-        kernel_size=(3, 3),
-        strides=(1, 1),
-        padding="same",
-        kernel_initializer=initializer,
-    )(relu1)
+    conv2 = (K.layers.Conv2D(F3, (3, 3),
+                             padding='same',
+                             kernel_initializer=he_init)(act1))
     bn2 = K.layers.BatchNormalization(axis=3)(conv2)
-    relu2 = K.layers.Activation("relu")(bn2)
+    act2 = K.layers.Activation('relu')(bn2)
 
-    # Third 1x1 convolution
-    conv3 = K.layers.Conv2D(
-        filters=F12,
-        kernel_size=(1, 1),
-        strides=(1, 1),
-        padding="valid",
-        kernel_initializer=initializer,
-    )(relu2)
+    conv3 = (K.layers.Conv2D(F12, (1, 1),
+                             padding='valid',
+                             kernel_initializer=he_init)(act2))
     bn3 = K.layers.BatchNormalization(axis=3)(conv3)
 
-    # Shortcut path
-    conv_shortcut = K.layers.Conv2D(
-        filters=F12,
-        kernel_size=(1, 1),
-        strides=(s, s),
-        padding="valid",
-        kernel_initializer=initializer,
-    )(A_prev)
-    bn_shortcut = K.layers.BatchNormalization(axis=3)(conv_shortcut)
+    shortcut = (K.layers.Conv2D(F12, (1, 1), strides=s,
+                                padding='valid',
+                                kernel_initializer=he_init)(A_prev))
+    shortcut_bn = K.layers.BatchNormalization(axis=3)(shortcut)
 
-    # Add main path and shortcut
-    add = K.layers.Add()([bn3, bn_shortcut])
-    activated_output = K.layers.Activation("relu")(add)
+    add = K.layers.Add()([bn3, shortcut_bn])
+    output = K.layers.Activation('relu')(add)
 
-    return activated_output
+    return output
