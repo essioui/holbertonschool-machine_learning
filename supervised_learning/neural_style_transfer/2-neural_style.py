@@ -148,5 +148,7 @@ class NST:
         return tf.expand_dims(gram, axis=0)
 
     def _init_batch_counters(self):
-        """Placeholder method for batch counters initialization."""
+        """
+        Initializes batch counters (not used in this implementation).
+        """
         pass
