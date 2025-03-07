@@ -146,3 +146,7 @@ class NST:
         gram /= tf.cast(h * w, tf.float32)
 
         return tf.expand_dims(gram, axis=0)
+
+    def _init_batch_counters(self):
+        """Placeholder method for batch counters initialization."""
+        pass
