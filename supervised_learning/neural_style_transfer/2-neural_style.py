@@ -149,6 +149,12 @@ class NST:
 
     def _init_batch_counters(self):
         """
-        Initializes batch counters (not used in this implementation).
+        Initializes batch counters for tracking batch processing.
+        This function is currently not used in this implementation,
+        but it is defined to maintain structural consistency.
+        Parameters:
+            - None
+        Returns:
+            - None
         """
         pass
