@@ -132,7 +132,7 @@ class NST:
         Function calculate gram matrices
         """
         if not isinstance(input_layer, (tf.Tensor, tf.Variable)):
-            raise TypeError("input_layer must be a tensor")
+            raise TypeError("input_layer must be a tensor of rank 4")
 
         if len(input_layer.shape) != 4:
             raise TypeError("input_layer must be a tensor of rank 4")
