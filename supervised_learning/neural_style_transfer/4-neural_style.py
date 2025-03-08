@@ -186,9 +186,9 @@ class NST:
 
         if (not isinstance(gram_target, (tf.Tensor, tf.Variable))
                 or gram_target.shape != (1, c, c)):
-            raise TypeError(f"gram_target must be a tensor of \
-                            shape [1, {c}, {c}] where {c} is the number \
-                            of channels in style_output")
+            raise TypeError(
+                f"gram_target must be a tensor of shape [1, {c}, {c}]"
+            )
 
         gram_style = NST.gram_matrix(style_output)
 
