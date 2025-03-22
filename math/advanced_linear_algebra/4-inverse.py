@@ -15,7 +15,7 @@ def inverse(matrix):
         raise TypeError("matrix must be a list of lists")
 
     if len(matrix) == 0:
-        raise ValueError("matrix must be a list of lists")
+        raise ValueError("matrix must be a non-empty square matrix")
 
     if any(len(row) != len(matrix) for row in matrix):
         raise TypeError("matrix must be a non-empty square matrix")
