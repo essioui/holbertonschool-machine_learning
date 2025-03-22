@@ -35,4 +35,4 @@ def definiteness(matrix):
     elif np.all(eigenvalues <= 0):
         return 'Negative semi-definite'
     else:
-        return 'Indefinite'
+        return None
