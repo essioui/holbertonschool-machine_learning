@@ -37,6 +37,10 @@ def cofactor(matrix):
         raise ValueError("matrix must be a non-empty square matrix")
 
     size = len(matrix)
+
+    if size == 1:
+        return [[1]]
+
     cofactor_matrix = [[0] * size for _ in range(size)]
 
     for i in range(size):
