@@ -5,12 +5,19 @@ Module represents a poisson distribution
 
 
 class Poisson:
+    """
+    A class representing a Poisson distribution.
+    """
     def __init__(self, data=None, lambtha=1.):
         """
         Constructor to initialize the Poisson distribution.
         Args:
             data: A list of data points (optional).
             lambtha: Expected number of occurrences (positive float).
+        raise:
+            ValueError: If `lambtha` is not a positive value.
+            TypeError: If `data` is not a list.
+            ValueError: If `data` does not contain multiple values
         """
         if lambtha <= 0:
             raise ValueError("lambtha must be a positive value")
