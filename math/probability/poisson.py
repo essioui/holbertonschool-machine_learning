@@ -31,3 +31,25 @@ class Poisson:
                 raise ValueError("data must contain multiple values")
 
             self.lambtha = sum(data) / len(data)
+
+    def pmf(self, k):
+        """
+        Calculates the probability mass function (PMF) for a given k value.
+        The PMF of a Poisson distribution is calculated using the formula:
+        P(X = k) = (lambda^k * e^(-lambda)) / k!
+        Arguments:
+        k (int):
+            The number of occurrences for which the probability is calculated.
+        Returns:
+            float: The probability of having exactly `k` occurrences.
+        Raises:
+        ValueError: If k is not a non-negative integer.
+        """
+        k = int(k)
+
+        if k < 0:
+            return 0
+
+        from math import exp, factorial
+
+        return (self.lambtha ** k * exp(-self.lambtha)) / factorial(k)
