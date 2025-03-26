@@ -2,7 +2,6 @@
 """
 Module define Bayesian probability
 """
-import numpy as np
 from scipy.special import comb
 
 
