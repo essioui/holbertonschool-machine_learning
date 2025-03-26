@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 def posterior(x, n, P, Pr):
     """
     calculates the posterior probability for the various hypothetical
