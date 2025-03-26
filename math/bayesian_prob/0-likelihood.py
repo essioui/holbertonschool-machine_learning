@@ -32,7 +32,7 @@ def likelihood(x, n, P):
     if (P < 0).any() or (P > 1).any():
         raise ValueError("All values in P must be in the range [0, 1]")
 
-    comb_nx = float(np.math.factorial(n)) // (
+    comb_nx = float(np.math.factorial(n)) / (
         np.math.factorial(x) * np.math.factorial(n - x))
 
     likelihoods = comb_nx * (P ** x) * ((1 - P) ** (n - x))
