@@ -19,6 +19,8 @@ class Poisson:
             TypeError: If `data` is not a list.
             ValueError: If `data` does not contain multiple values
         """
+        e = 2.7182818285
+
         if lambtha <= 0:
             raise ValueError("lambtha must be a positive value")
 
@@ -50,6 +52,9 @@ class Poisson:
         if k < 0:
             return 0
 
-        from math import exp, factorial
+        lambtha = self.lambtha
+        exp_neg_lambda = Poisson.e ** (-lambtha)
 
-        return (self.lambtha ** k * exp(-self.lambtha)) / factorial(k)
+        result = (lambtha ** k) * exp_neg_lambda / factorial(k)
+        
+        return result
