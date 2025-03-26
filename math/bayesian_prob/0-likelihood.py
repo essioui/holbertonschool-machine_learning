@@ -2,7 +2,7 @@
 """
 Module define Bayesian probability
 """
-from scipy.special import comb
+import numpy as np
 
 
 def likelihood(x, n, P):
@@ -20,15 +20,21 @@ def likelihood(x, n, P):
 
     if not isinstance(x, int) or x < 0:
         raise ValueError(
-            "x must be an integerthat is greater than or equal to 0"
+            "x must be an integer that is greater than or equal to 0"
             )
 
     if x > n:
         raise ValueError("x cannot be greater than n")
 
+    if not isinstance(P, np.ndarray) or P.ndim != 1:
+        raise TypeError("P must be a 1D numpy.ndarray")
+
     if (P < 0).any() or (P > 1).any():
         raise ValueError("All values in P must be in the range [0, 1]")
 
-    likehoods = comb(n, x) * (P ** x) * ((1 - P) ** (n - x))
+    comb_nx = np.math.factorial(n) // (
+        np.math.factorial(x) * np.math.factorial(n - x))
 
-    return likehoods
+    likelihoods = comb_nx * (P ** x) * ((1 - P) ** (n - x))
+
+    return likelihoods
