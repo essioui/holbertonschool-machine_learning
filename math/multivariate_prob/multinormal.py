@@ -44,7 +44,7 @@ class MultiNormal:
             raise TypeError("x must be a numpy.ndarray")
 
         if x.shape != (self.d, 1):
-            raise ValueError("x must have the shape ({self.d}, 1)")
+            raise ValueError(f"x must have the shape ({self.d}, 1)")
 
         determinant_cov = np.linalg.det(self.cov)
 
