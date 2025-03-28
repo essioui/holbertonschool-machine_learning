@@ -20,7 +20,7 @@ class MultiNormal:
         if not isinstance(data, np.ndarray) or data.ndim != 2:
             raise TypeError("data must be a 2D numpy.ndarray")
 
-        d, n = data.shape
+        self.d, n = data.shape
 
         if n < 2:
             raise ValueError("data must contain multiple data points")
@@ -30,3 +30,32 @@ class MultiNormal:
         data_center = data - self.mean
 
         self.cov = (data_center @ data_center.T) / (n - 1)
+
+    def pdf(self, x):
+        """
+        Calculates the PDF at a data point
+        Args:
+            x is a numpy.ndarray of shape (d, 1):
+                d is the number of dimensions of the Multinomial
+        Returns:
+            the value of the PDF
+        """
+        if not isinstance(x, np.ndarray):
+            raise TypeError("x must be a numpy.ndarray")
+
+        if x.shape != (self.d, 1):
+            raise ValueError("x must have the shape ({d}, 1)")
+
+        determinant_cov = np.linalg.det(self.cov)
+
+        inv_cov = np.linalg.inv(self.cov)
+
+        diff = x - self.mean
+
+        mahalanobis_distance = diff.T @ inv_cov @ diff
+
+        factor = 1 / (np.sqrt((2 * np.pi) ** self.d * determinant_cov))
+
+        pdf_value = factor * np.exp(-0.5 * mahalanobis_distance)
+
+        return pdf_value.item()
