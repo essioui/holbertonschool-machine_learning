@@ -15,9 +15,10 @@ def mean_cov(X):
         mean is a numpy.ndarray of shape (1, d)
         cov is a numpy.ndarray of shape (d, d)
     """
-    n, d = X.shape
     if not isinstance(X, np.ndarray) or X.ndim != 2:
         raise TypeError("X must be a 2D numpy.ndarray")
+
+    n, d = X.shape
 
     if n < 2:
         raise ValueError("X must contain multiple data points")
