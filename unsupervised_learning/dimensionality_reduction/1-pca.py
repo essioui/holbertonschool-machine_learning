@@ -1,4 +1,4 @@
-#!usr/bin/pyton3
+#!/usr/bin/env python3
 """
 Module define  PCA v2
 """
