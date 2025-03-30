@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+Module define  Initialize t-SNE
 """
 import numpy as np
 
