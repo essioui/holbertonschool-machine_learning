@@ -55,4 +55,4 @@ def kmeans(X, k, iterations=1000):
             else:
                 C[i] = np.mean(clusters_points, axis=0)
 
-    return C, clss
+    return C.copy(), clss.copy()
