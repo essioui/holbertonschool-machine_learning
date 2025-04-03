@@ -28,26 +28,32 @@ def kmeans(X, k, iterations=1000):
     if not isinstance(iterations, int) or iterations <= 0:
         return None, None
 
-    n, d = X.shape
+    _, d = X.shape
 
-    min_vals = np.min(X, axis=0)
-    max_vals = np.max(X, axis=0)
+    centroids = np.random.uniform(
+        low=np.min(X, axis=0),
+        high=np.max(X, axis=0),
+        size=(k, d)
+    )
 
-    C = np.random.uniform(min_vals, max_vals, (k, d))
+    for i in range(iterations):
+        old_centroids = np.copy(centroids)
 
-    for _ in range(iterations):
-        old_centroid = np.copy(C)
-        distances = np.linalg.norm(X[:, np.newaxis] - C, axis=2)
+        distances = np.sqrt(np.sum((X[:, np.newaxis] - centroids)**2, axis=2))
+
         clss = np.argmin(distances, axis=1)
 
-        for i in range(k):
-            cluster_points = X[clss == i]
-            if cluster_points.shape[0] == 0:
-                C[i] = np.random.uniform(min_vals, max_vals, (1, d))
+        for j in range(k):
+            if X[clss == j].size == 0:
+                centroids[j] = np.random.uniform(
+                    low=np.min(X, axis=0),
+                    high=np.max(X, axis=0),
+                    size=(1, d)
+                )
             else:
-                C[i] = np.mean(cluster_points, axis=0)
+                centroids[j] = np.mean(X[clss == j], axis=0)
 
-        if np.allclose(C, old_centroid):
+        if np.allclose(old_centroids, centroids):
             break
 
-    return C, clss
+    return centroids, clss
