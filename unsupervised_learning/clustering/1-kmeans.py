@@ -36,20 +36,18 @@ def kmeans(X, k, iterations=1000):
     C = np.random.uniform(min_vals, max_vals, (k, d))
 
     for _ in range(iterations):
+        old_centroid = np.copy(C)
         distances = np.linalg.norm(X[:, np.newaxis] - C, axis=2)
         clss = np.argmin(distances, axis=1)
 
-        Centroid = np.copy(C)
-
         for i in range(k):
-            if np.sum(clss == i) == 0:
-                Centroid[i] = np.random.uniform(min_vals, max_vals, (1, d))
+            cluster_points = X[clss == i]
+            if cluster_points.shape[0] == 0:
+                C[i] = np.random.uniform(min_vals, max_vals, (1, d))
             else:
-                Centroid[i] = np.mean(X[clss == i], axis=0)
+                C[i] = np.mean(cluster_points, axis=0)
 
-        if np.array_equal(Centroid, C):
-            return C, clss
-        else:
-            C = Centroid
+        if np.allclose(C, old_centroid):
+            break
 
-    return C.copy(), clss.copy()
+    return C, clss
