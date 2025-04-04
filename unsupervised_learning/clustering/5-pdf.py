@@ -18,10 +18,10 @@ def pdf(X, m, S):
     All values in P should have a minimum value of 1e-300
     """
     if (not isinstance(X, np.ndarray) or not isinstance(m, np.ndarray)
-            or not (S, np.ndarray)):
+            or not isinstance(S, np.ndarray)):
         return None
 
-    if X.ndim != 2 or m.ndim != 1 or S.ndim != 2:
+    if len(X.shape) != 2 or len(m.shape) != 1 or len(S.shape) != 2:
         return None
 
     n, d = X.shape
