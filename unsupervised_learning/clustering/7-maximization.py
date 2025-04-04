@@ -23,24 +23,22 @@ def maximization(X, g):
     if len(X.shape) != 2 or len(g.shape) != 2:
         return None, None, None
 
+    if X.shape[0] != g.shape[1] or not np.allclose(g.sum(axis=0), 1.0):
+        return None, None, None
+
     n, d = X.shape
-    k, n2 = g.shape
+    k, _ = g.shape
 
-    if n != n2:
-        return None, None, None
+    # Update the priors
+    pi = np.sum(g, axis=1) / n
 
-    Nk = np.sum(g, axis=1)
-    if np.any(Nk == 0):
-        return None, None, None
+    # Update the centroids
+    m = np.dot(g, X) / np.sum(g, axis=1)[:, np.newaxis]
 
-    m = (g @ X) / Nk[:, np.newaxis]
-
+    # Update the covariance matrices, using the new centroids
     S = np.zeros((k, d, d))
     for i in range(k):
-        X_centered = X - m[i]
-        gamma = g[i][:, np.newaxis]
-        S[i] = (gamma * X_centered).T @ X_centered / Nk[i]
-
-    pi = Nk / n
+        diff = X - m[i]
+        S[i] = np.dot(g[i] * diff.T, diff) / np.sum(g[i])
 
     return pi, m, S
