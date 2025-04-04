@@ -30,15 +30,17 @@ def maximization(X, g):
         return None, None, None
 
     Nk = np.sum(g, axis=1)
+    if np.any(Nk == 0):
+        return None, None, None
 
-    pi = Nk / n
-
-    m = np.dot(g, X) / Nk[:, np.newaxis]
+    m = (g @ X) / Nk[:, np.newaxis]
 
     S = np.zeros((k, d, d))
     for i in range(k):
-        x_shifted = X - m[i]
-        weighted = g[i][:, np.newaxis] * x_shifted
-        S[i] = np.dot(weighted.T, x_shifted) / Nk[i]
+        X_centered = X - m[i]
+        gamma = g[i][:, np.newaxis]
+        S[i] = (gamma * X_centered).T @ X_centered / Nk[i]
+
+    pi = Nk / n
 
     return pi, m, S
