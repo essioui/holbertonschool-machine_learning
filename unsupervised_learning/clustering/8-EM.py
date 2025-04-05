@@ -42,27 +42,26 @@ def expectation_maximization(X, k, iterations=1000, tol=1e-5, verbose=False):
 
     pi, m, S = initialize(X, k)
 
-    g, lkhd = expectation(X, pi, m, S)
-
     for i in range(iterations):
+        # Evaluate the probabilities and likelihoods with current parameters
+        g, prev_li = expectation(X, pi, m, S)
+
+        # In verbose mode, print the likelihood every 10 iterations after 0
+        if verbose and i % 10 == 0:
+            print(f"Log Likelihood after {i} iterations: {round(prev_li, 5)}")
+
+        # Re-estimate the parameters with the new values
         pi, m, S = maximization(X, g)
 
-        g, lkhd_new = expectation(X, pi, m, S)
+        # Evaluate new log likelihood
+        g, li = expectation(X, pi, m, S)
 
-        if verbose and i % 10 == 0:
-            print(f"Log Likelihood after {i} iterations: {lkhd:.5f}")
-
-        if abs(lkhd - lkhd_new) <= 0:
-            if verbose:
-                print(
-                    f"Log Likelihood after {i + 1} iterations: {lkhd_new:.5f}"
-                )
+        # If the likelihood varied by less than the tolerance value, we stop
+        if np.abs(li - prev_li) <= tol:
             break
 
-        lkhd = lkhd_new
-
-    else:
-        if verbose:
-            print(f"Log Likelihood after {iterations} iterations: {lkhd:.5f}")
-
-    return pi, m, S, g, lkhd
+    # Last verbose message with current likelihood
+    if verbose:
+        # NOTE i + 1 since it has been updated once more since last print
+        print(f"Log Likelihood after {i + 1} iterations: {round(li, 5)}")
+    return pi, m, S, g, li
