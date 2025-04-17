@@ -10,13 +10,13 @@ class GaussianProcess:
     Represents a noiseless 1D Gaussian process
     """
 
-    def __init__(self, X_init, Y_init, s=1, sigma_f=1):
+    def __init__(self, X_init, Y_init, l=1, sigma_f=1):
         """
         Class constructor
         """
         self.X = X_init
         self.Y = Y_init
-        self.s = s
+        self.l = l
         self.sigma_f = sigma_f
 
         self.K = self.kernel(self.X, self.X)
