@@ -29,8 +29,7 @@ class BayesianOptimization:
         You may use GP = __import__('2-gp').GaussianProcess
         """
         self.f = f
-        self.gp = GP(X_init, Y_init, l=l, sigma_f=sigma_f)
-        self.bounds = bounds
+        self.gp = GP(X_init, Y_init, l, sigma_f)
         self.xsi = xsi
         self.minimize = minimize
 
