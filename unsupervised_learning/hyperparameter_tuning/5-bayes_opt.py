@@ -90,19 +90,13 @@ class BayesianOptimization:
                 X_opt is a numpy.ndarray of shape (1,)
                 Y_opt is a numpy.ndarray of shape (1,)
         """
+        X = []
         for _ in range(iterations):
             X_next, _ = self.acquisition()
-
-            if np.any(np.all(np.isclose(self.gp.X, X_next), axis=1)):
+            if X_next in X:
                 break
-
             Y_next = self.f(X_next)
             self.gp.update(X_next, Y_next)
+            X.append(X_next)
 
-        idx = np.argmin(self.gp.Y) if self.minimize else np.argmax(self.gp.Y)
-
-        X_opt = self.gp.X[idx]
-
-        Y_opt = self.gp.Y[idx]
-
-        return X_opt, Y_opt
+        return X_next, Y_next
