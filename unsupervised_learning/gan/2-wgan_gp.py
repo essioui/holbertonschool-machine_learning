@@ -80,12 +80,51 @@ class WGAN_GP(keras.Model):
 
     # generator of interpolating samples of size batch_size
     def get_interpolated_sample(self, real_sample, fake_sample):
+        """
+    Generates an interpolated sample between real and fake samples.
+
+    This is typically used in Wasserstein GANs with Gradient Penalty(WGAN-GP),
+    where interpolation between real &fake datapoints is needed to compute the
+    gradient penalty term.
+    Args:
+        real_sample (tf.Tensor): A batch of real data samples.
+        fake_sample (tf.Tensor): A batch of generated (fake) data samples.
+    Returns:
+        tf.Tensor: A batch interpolated samples, where each sample is a linear
+        interpolation between a real and a fake sample using random weights.
+    The interpolation is computed as:
+        interpolated = u * real_sample + (1 - u) * fake_sample
+    where `u` is a random tensor from a uniform distribution between 0 and 1,
+    with the same shape as the batch.
+        """
         u = tf.random.uniform(self.scal_shape)
         v = tf.ones(self.scal_shape)-u
         return u*real_sample+v*fake_sample
 
     # computing the gradient penalty
     def gradient_penalty(self, interpolated_sample):
+        """
+    Computes the gradient penalty for a batch of interpolated samples.
+
+    This is used in Wasserstein GANs with Gradient Penalty to enforce
+    the Lipschitz constraint by penalizing the norm of the gradient of the
+    discriminator's output with respect to its input.
+    Args:
+        interpolated_sample: A batch of interpolated samples, typically
+            generated as a linear interpolation between real and fake samples.
+    Returns:
+        tf.Tensor: The mean squared difference between the L2 norm of the
+        gradients and 1.0. A lower value indicates a better enforcement of
+        the Lipschitz constraint.
+    Formula:
+        penalty = E[(||∇D(ẋ)||₂ - 1)²]
+        where ẋ is the interpolated input and D is the discriminator.
+
+    Notes:
+        - The gradients are taken with respect to the interpolated samples.
+        - The norm is computed across the feature dimensions.
+        - `self.axis` should typically exclude the batch dimension
+        """
         with tf.GradientTape() as gp_tape:
             gp_tape.watch(interpolated_sample)
             pred = self.discriminator(interpolated_sample, training=True)
