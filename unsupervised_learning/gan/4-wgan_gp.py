@@ -172,10 +172,10 @@ class WGAN_GP(keras.Model):
                               self.generator.trainable_variables)
         self.generator.optimizer.apply_gradients(
             zip(gen_gradients, self.generator.trainable_variables))
-        
+
         return {"discr_loss": discr_loss, "gen_loss": gen_loss, "gp": gp}
 
-    def replace_weights(self,gen_h5,disc_h5):
+    def replace_weights(self, gen_h5, disc_h5):
         """
         Replace the weights of the generator and discriminator
         Args:
@@ -184,5 +184,3 @@ class WGAN_GP(keras.Model):
         """
         self.generator.load_weights(gen_h5)
         self.discriminator.load_weights(disc_h5)
-
-        
