@@ -1,3 +1,21 @@
+#!/usr/bin/env python3
+"""
+Preprocess Bitcoin price data for time series forecasting.
+This script loads Bitcoin price data from two sources (Bitstamp and Coinbase),
+combines them, and prepares the data for training a time series forecasting model.
+It includes the following steps:
+1. Load the data from CSV files.
+2. Remove rows with missing values.
+3. Convert the 'Timestamp' column from UNIX timestamp to datetime.
+4. Combine the two datasets.
+5. Keep only the 'Timestamp' and 'Close' columns.
+6. Set 'Timestamp' as the DataFrame index.
+7. Resample the data to hourly frequency, taking the last price per hour.
+8. Scale the 'Close' prices between 0 and 1 for model training.
+9. Create sequences of past 24 hours of data for training.
+10. Split the data into training, validation, and test sets.
+11. Save the preprocessed data to a .npz file.
+"""
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
