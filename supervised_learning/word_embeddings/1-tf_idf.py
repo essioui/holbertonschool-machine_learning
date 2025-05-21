@@ -27,4 +27,3 @@ def tf_idf(sentences, vocab=None):
     features = vectorizer.get_feature_names_out()
 
     return embeddings.toarray(), features
-
