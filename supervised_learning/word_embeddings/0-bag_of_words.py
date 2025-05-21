@@ -51,4 +51,4 @@ def bag_of_words(sentences, vocab=None):
             if word in feature_idx:
                 embeddings[i, feature_idx[word]] += 1
 
-    return embeddings, features
+    return embeddings, np.array(features)
