@@ -5,7 +5,7 @@ TF_IDF
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 
-def tf_idf(sentences, vocab):
+def tf_idf(sentences, vocab=None):
     """
      Creates a TF-IDF embedding
      Args:
