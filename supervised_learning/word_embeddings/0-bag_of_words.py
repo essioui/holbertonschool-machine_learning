@@ -47,8 +47,8 @@ def bag_of_words(sentences, vocab=None):
     embeddings = np.zeros((len(sentences), len(features)), dtype=int)
 
     for i, words in enumerate(tokenized):
-        for word in set(words):
+        for word in words:
             if word in feature_idx:
-                embeddings[i, feature_idx[word]] = 1
+                embeddings[i, feature_idx[word]] += 1
 
     return embeddings, features
