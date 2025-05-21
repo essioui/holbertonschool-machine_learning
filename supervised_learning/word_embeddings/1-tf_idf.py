@@ -17,15 +17,14 @@ def tf_idf(sentences, vocab=None):
             f is the number of features analyzed
         features is a list of the features used for embeddings
     """
-    if not sentences:
-        return [], []
+    # Initialize the TF-IDF vectorizer with the given vocabulary
+    vectorizer = TfidfVectorizer(vocabulary=vocab)
 
-    vectorizer = TfidfVectorizer(vocabulary=vocab, lowercase=True)
-    try:
-        X = vectorizer.fit_transform(sentences)
-    except ValueError:
-        return [], []
+    # Fit and transform the sentences to get the TF-IDF embeddings
+    embeddings = vectorizer.fit_transform(sentences)
 
-    embeddings = X.toarray()
-    features = vectorizer.get_feature_names_out().tolist()
-    return embeddings, features
+    # Extract the features (words) used by the vectorizer
+    features = vectorizer.get_feature_names_out()
+
+    return embeddings.toarray(), features
+
