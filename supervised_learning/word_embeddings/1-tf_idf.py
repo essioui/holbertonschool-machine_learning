@@ -17,6 +17,10 @@ def tf_idf(sentences, vocab):
             f is the number of features analyzed
         features is a list of the features used for embeddings
     """
+    if vocab is None:
+        vocab = sorted(
+            set(word.lower() for s in sentences for word in s.split())
+        )
     vectorizer = TfidfVectorizer(vocabulary=vocab, lowercase=True)
     X = vectorizer.fit_transform(sentences)
     embeddings = X.toarray()
