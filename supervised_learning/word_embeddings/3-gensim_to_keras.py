@@ -5,7 +5,6 @@ Extract Word2Vec model from Gensim and convert it to Keras Embedding layer.
 import tensorflow as tf
 
 
-
 def gensim_to_keras(model):
     """
     Converts a gensim word2vec model to a keras Embedding layer
