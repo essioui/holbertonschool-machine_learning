@@ -2,9 +2,8 @@
 """
 Extract Word2Vec model from Gensim and convert it to Keras Embedding layer.
 """
-import numpy as np
 import tensorflow as tf
-from tensorflow.keras.layers import Embedding
+
 
 
 def gensim_to_keras(model):
@@ -25,7 +24,7 @@ def gensim_to_keras(model):
     weights = model.wv.vectors
 
     # Normalize the weights
-    embadding_layer = Embedding(
+    embadding_layer = tf.keras.layers.Embedding(
         input_dim=vocab_size,
         output_dim=embedding_dim,
         weights=[weights],
