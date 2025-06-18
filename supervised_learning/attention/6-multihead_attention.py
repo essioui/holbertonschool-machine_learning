@@ -35,7 +35,6 @@ class MultiHeadAttention(tf.keras.layers.Layer):
         # Define the linear layer for output
         self.linear = tf.keras.layers.Dense(dm)
 
-
     def split_heads(self, x, batch_size):
         """
         Split the last dimension into (h, depth)
@@ -56,20 +55,27 @@ class MultiHeadAttention(tf.keras.layers.Layer):
             output and attention weights
         """
         batch_size = tf.shape(Q)[0]
-        
+
+        # Linear projections
         Q = self.Wq(Q)
         K = self.Wk(K)
         V = self.Wv(V)
-        
+
+        # Split into multiple heads
         Q = self.split_heads(Q, batch_size)
         K = self.split_heads(K, batch_size)
         V = self.split_heads(V, batch_size)
-        
+
+        # Scaled Dot-Product Attentio
         scaled_attention, weights = sdp_attention(Q, K, V, mask)
-        
+
+        # Concatenate heads
         scaled_attention = tf.transpose(scaled_attention, perm=[0, 2, 1, 3])
-        concat_attention = tf.reshape(scaled_attention, (batch_size, -1, self.dm))
-        
+        concat_attention = tf.reshape(
+            scaled_attention, (batch_size, -1, self.dm)
+        )
+
+        # Final linear layer
         output = self.linear(concat_attention)
-        
+
         return output, weights
