@@ -10,11 +10,10 @@ class Dataset:
     def __init__(self):
         """Initialize the dataset and create tokenizers."""
         # Load dataset from TensorFlow Datasets
-        data, metadata = tfds.load('ted_hrlr_translate/pt_to_en',
-                                   as_supervised=True,
-                                   with_info=True)
-        self.data_train = data['train']
-        self.data_valid = data['validation']
+        self.data_train = tfds.load('ted_hrlr_translate/pt_to_en',
+                                    split='validation', as_supervised=True)
+        self.data_valid = tfds.load('ted_hrlr_translate/pt_to_en',
+                                    split='validation', as_supervised=True)
 
         # Build the tokenizers
         self.tokenizer_pt, self.tokenizer_en = self.tokenize_dataset(
