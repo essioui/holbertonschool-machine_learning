@@ -37,14 +37,16 @@ def create_masks(inputs, target):
         inputs (tf.Tensor): Input sequence tensor.
         target (tf.Tensor): Target sequence tensor.
     Returns:
-        tuple: Tuple containing the encoder mask and the decoder mask.
+        encoder_mask, combined_mask, decoder_mask
     """
-    # Create padding masks for the inputs and target sequences
+    # Padding mask for encoder
     encoder_mask = create_padding_mask(inputs)
-    decoder_mask = create_padding_mask(target)
 
-    # Create look-ahead mask for the decoder
+    # Look-ahead mask + padding for target
     look_ahead_mask = create_look_ahead_mask(tf.shape(target)[1])
-    combined_mask = tf.maximum(decoder_mask, look_ahead_mask)
+    target_padding_mask = create_padding_mask(target)
+    combined_mask = tf.maximum(target_padding_mask, look_ahead_mask)
 
-    return encoder_mask, combined_mask
+    decoder_mask = create_padding_mask(inputs)
+
+    return encoder_mask, combined_mask, decoder_mask
