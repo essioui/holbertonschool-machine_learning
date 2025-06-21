@@ -130,3 +130,13 @@ class Dataset:
         Filter out sentence pairs where either exceeds max_len
         """
         return tf.logical_and(pt_len <= self.max_len, en_len <= self.max_len)
+
+    @property
+    def pt_tokenizer(self):
+        """Property to access Portuguese tokenizer"""
+        return self.tokenizer_pt
+
+    @property
+    def en_tokenizer(self):
+        """Property to access English tokenizer"""
+        return self.tokenizer_en
