@@ -5,7 +5,9 @@ Load the Environment
 import gymnasium as gym
 
 
-def load_frozen_lake(desc=None, map_name=None, is_slippery=False):
+def load_frozen_lake(
+    desc=None, map_name=None, is_slippery=False, render_mode=None
+):
     """
     Loads the pre-made FrozenLakeEnv evnironment from gymnasium
     Args:
@@ -21,6 +23,7 @@ def load_frozen_lake(desc=None, map_name=None, is_slippery=False):
         'FrozenLake-v1',
         desc=desc,
         map_name=map_name,
-        is_slippery=is_slippery
+        is_slippery=is_slippery,
+        render_mode=render_mode
     )
     return env
