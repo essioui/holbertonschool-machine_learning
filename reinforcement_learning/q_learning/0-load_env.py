@@ -24,6 +24,6 @@ def load_frozen_lake(
         desc=desc,
         map_name=map_name,
         is_slippery=is_slippery,
-        render_mode=render_mode
+        render_mode="ansi"
     )
     return env
