@@ -5,6 +5,16 @@ SARSA(λ) algorithm implementation.
 import numpy as np
 
 
+def epsilon_greedy(Q, state, epsilon):
+    """
+    Determine action using epsilon-greedy policy.
+    """
+    if np.random.uniform(0, 1) > epsilon:
+        return np.argmax(Q[state, :])
+    else:
+        return np.random.randint(0, Q.shape[1])
+
+
 def sarsa_lambtha(
     env, Q, lambtha, episodes=5000, max_steps=100, alpha=0.1, gamma=0.99,
     epsilon=1, min_epsilon=0.1, epsilon_decay=0.05
@@ -25,45 +35,35 @@ def sarsa_lambtha(
     Returns:
         Q, the updated Q table
     """
-    n_states, n_actions = Q.shape
-
-    def choose_action(state, epsilon):
-        """
-        Choose an action using epsilon-greedy policy.
-        """
-        if np.random.rand() < epsilon:
-            return env.action_space.sample()
-        return np.argmax(Q[state])
+    initial_epsilon = epsilon
 
     for ep in range(episodes):
         state, _ = env.reset()
-        action = choose_action(state, epsilon)
+        action = epsilon_greedy(Q, state, epsilon)
 
         eligibility = np.zeros_like(Q)
 
         for step in range(max_steps):
             next_state, reward, terminated, truncated, _ = env.step(action)
-
-            done = terminated or truncated
-
-            next_action = choose_action(next_state, epsilon)
+            next_action = epsilon_greedy(Q, next_state, epsilon)
 
             TD_error = (
-                reward + gamma * Q[next_state, next_action] * (not done)
-                - Q[state, action]
+                reward + gamma * Q[next_state, next_action] - Q[state, action]
             )
 
+            eligibility *= gamma * lambtha
             eligibility[state, action] += 1
 
             Q += alpha * TD_error * eligibility
 
-            eligibility *= gamma * lambtha
-
-            if done:
-                break
-
             state, action = next_state, next_action
 
-        epsilon = max(min_epsilon, epsilon * (1 - epsilon_decay))
+            if terminated or truncated:
+                break
+
+        epsilon = (
+            min_epsilon + (initial_epsilon - min_epsilon)
+            * np.exp(-epsilon_decay * ep)
+        )
 
     return Q
