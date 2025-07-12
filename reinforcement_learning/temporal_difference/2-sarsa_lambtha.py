@@ -48,8 +48,10 @@ def sarsa_lambtha(
 
             next_action = choose_action(next_state, epsilon)
 
-            TD_error = reward + gamma * Q[next_state, next_action] * (not done)
-            - Q[state, action]
+            TD_error = (
+                reward + gamma * Q[next_state, next_action] * (not done)
+                - Q[state, action]
+            )
 
             eligibility[state, action] += 1
 
@@ -64,4 +66,4 @@ def sarsa_lambtha(
 
         epsilon = max(min_epsilon, epsilon * (1 - epsilon_decay))
 
-        return Q
+    return Q
