@@ -58,9 +58,9 @@ def train(env, nb_episodes, alpha=0.000045, gamma=0.98):
             reward = sum(
                 R * gamma ** indx for indx, R in enumerate(episode_rewards[i:])
             )
-            
+
             weights += alpha * reward * gradient
-            
+
         print(f"Episode: {episode}, Score: {score}")
-        
+
     return scores
