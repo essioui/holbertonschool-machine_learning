@@ -3,6 +3,7 @@
 Implement the training
 """
 import numpy as np
+import random
 policy_gradient = __import__('policy_gradient').policy_gradient
 
 
@@ -17,16 +18,18 @@ def train(env, nb_episodes, alpha=0.000045, gamma=0.98):
     Returns:
         all values of the score (sum of all rewards during one episode loop)
     """
-    weights = np.random.randn(
+    np.random.seed(0)
+    random.seed(0)
+    weights = np.random.rand(
         env.observation_space.shape[0],
         env.action_space.n
-    ) * 0.01
+    )
 
     scores = []
 
     for episode in range(nb_episodes):
 
-        state, _ = env.reset()
+        state, _ = env.reset(seed=0)
 
         episode_rewards = []
 
@@ -67,6 +70,6 @@ def train(env, nb_episodes, alpha=0.000045, gamma=0.98):
 
         scores.append(score)
 
-        print(f'Episode {episode}, Score: {score}')
+        print(f"Episode {episode}, Score: {score}")
 
     return scores
