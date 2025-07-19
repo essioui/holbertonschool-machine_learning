@@ -10,7 +10,7 @@ def softmax(x):
     Compute softmax values for each sets of scores in x.
     """
     e_x = np.exp(x - np.max(x))
-    return e_x / e_x.sum(axis=1, keepdims=True)
+    return e_x / np.sum(e_x)
 
 
 def policy(state, weight):
@@ -24,3 +24,27 @@ def policy(state, weight):
     """
     z = np.matmul(state, weight)
     return softmax(z)
+
+
+def policy_gradient(state, weight):
+    """
+    Compute the Monte-Carlo policy gradient based on state and a weight matrix
+    Args:
+        state: matrix representing the current observation of the environment
+        weight:  matrix of random weight
+    Returns:
+        The action and the gradient (in this order)
+    """
+    probabilities = policy(state, weight)
+
+    action = np.random.choice(len(probabilities), p=probabilities)
+
+    one_hot = np.zeros_like(probabilities)
+
+    one_hot[action] = 1
+
+    diff = one_hot - probabilities
+
+    grad = np.outer(state, diff)
+
+    return action, grad
