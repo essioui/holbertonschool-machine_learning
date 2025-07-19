@@ -3,7 +3,6 @@
 Implement the training
 """
 import numpy as np
-import random
 policy_gradient = __import__('policy_gradient').policy_gradient
 
 
@@ -18,8 +17,6 @@ def train(env, nb_episodes, alpha=0.000045, gamma=0.98):
     Returns:
         all values of the score (sum of all rewards during one episode loop)
     """
-    np.random.seed(0)
-    random.seed(0)
     weights = np.random.rand(
         env.observation_space.shape[0],
         env.action_space.n
@@ -29,7 +26,7 @@ def train(env, nb_episodes, alpha=0.000045, gamma=0.98):
 
     for episode in range(nb_episodes):
 
-        state, _ = env.reset(seed=0)
+        state = env.reset()[0]
 
         episode_rewards = []
 
@@ -45,31 +42,25 @@ def train(env, nb_episodes, alpha=0.000045, gamma=0.98):
 
             next_state, reward, terminated, truncated, _ = env.step(action)
 
-            done = terminated or truncated
-
             episode_rewards.append(reward)
 
             episode_gradients.append(gradient)
 
             state = next_state
 
-        G = 0
-        returns = []
-
-        for reward in reversed(episode_rewards):
-
-            G = reward + gamma * G
-
-            returns.insert(0, G)
-
-        for gradient, G in zip(episode_gradients, returns):
-
-            weights += alpha * G * gradient
+            done = terminated or truncated
 
         score = sum(episode_rewards)
 
         scores.append(score)
 
-        print(f"Episode {episode}, Score: {score}")
-
+        for i, gradient in enumerate(episode_gradients):
+            reward = sum(
+                R * gamma ** indx for indx, R in enumerate(episode_rewards[i:])
+            )
+            
+            weights += alpha * reward * gradient
+            
+        print(f"Episode: {episode}, Score: {score}")
+        
     return scores
