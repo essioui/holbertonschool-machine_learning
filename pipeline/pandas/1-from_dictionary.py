@@ -10,3 +10,5 @@ data = {
 }
 
 df = pd.DataFrame(data)
+
+df.index = ['A', 'B', 'C', 'D']
