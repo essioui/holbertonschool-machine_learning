@@ -16,4 +16,4 @@ def slice(df):
 
     df2 = df1.iloc[::60, :]
 
-    return df2.reset_index(drop=True)
+    return df2
