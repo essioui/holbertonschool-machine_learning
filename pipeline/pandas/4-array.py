@@ -2,7 +2,6 @@
 """
 To Numpy
 """
-import pandas as pd
 
 
 def array(df):
