@@ -2,7 +2,6 @@
 """
 Analyze
 """
-import pandas as pd
 
 
 def analyze(df):
@@ -14,15 +13,6 @@ def analyze(df):
     """
     df = df.drop(columns=['Timestamp'])
 
-    df_stats = pd.DataFrame({
-        'count': df.count(),
-        'mean': df.mean(),
-        'std': df.std(),
-        'min': df.min(),
-        '25%': df.quantile(0.25),
-        '50%': df.median(),
-        '75%': df.quantile(0.75),
-        'max': df.max()
-    })
+    df = df.describe()
 
-    return df_stats.transpose()
+    return df
