@@ -49,8 +49,10 @@ def get_first_launch():
     formatted_time = local_time.isoformat()
 
     # Step 8: Final output
-    print(f"{first['name']} ({formatted_time}) {rocket_name} -\
-          {launchpad_name}({locality})")
+    print(
+        f"{first['name']} ({formatted_time}) {rocket_name}"
+        f"- {launchpad_name.strip()} ({locality.strip()})"
+    )
 
 
 if __name__ == '__main__':
