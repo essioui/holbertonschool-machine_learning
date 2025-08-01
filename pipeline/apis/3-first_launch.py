@@ -7,11 +7,21 @@ from datetime import datetime
 
 
 def get_first_launch():
+    """
+    Retrieves and displays information about the first SpaceX launch.
+        Get all launches
+        Sort by oldest first
+        Get first launch
+        Extract IDs
+        Get rocket info
+        Get launchpad info
+        Convert UTC to local time 
+    """
     # Step 1: Get all launches
     url = "https://api.spacexdata.com/v4/launches"
     launches = requests.get(url).json()
 
-    # Step 2: Sort by date_unix (oldest first)
+    # Step 2: Sort by oldest first
     launches.sort(key=lambda l: l.get("date_unix", float('inf')))
 
     # Step 3: Get first launch
