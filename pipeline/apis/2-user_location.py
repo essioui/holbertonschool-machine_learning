@@ -33,7 +33,7 @@ if __name__ == '__main__':
         if reset:
             rest_time = int(reset)
             current_time = int(datetime.now().timestamp())
-            minutes = ((rest_time - current_time) // 60) + 1
+            minutes = ((rest_time - current_time) // 60)
 
             print(f"Reset in {minutes} min")
 
