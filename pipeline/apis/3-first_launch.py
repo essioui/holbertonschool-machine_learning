@@ -50,9 +50,9 @@ def get_first_launch():
 
     # Step 8: Final output
     print(
-        f"{first['name']} ({formatted_time}) {rocket_name}"
-        f"- {launchpad_name.strip()} ({locality.strip()})"
-    )
+    f"{first['name']} ({formatted_time}) "
+    f"{rocket_name} - {launchpad_name.strip()} ({locality.strip()})"
+)
 
 
 if __name__ == '__main__':
