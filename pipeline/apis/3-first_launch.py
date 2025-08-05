@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """Fetch upcoming SpaceX launch data and display in required format"""
 import requests
 
