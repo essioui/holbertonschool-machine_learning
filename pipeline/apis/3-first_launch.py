@@ -1,59 +1,30 @@
-#!/usr/bin/env python3
-"""
-Script that displays the first launch with these information
-"""
+#!/usr/bin/python3
+"""Fetch upcoming SpaceX launch data and display in required format"""
 import requests
-from datetime import datetime
 
 
-def get_first_launch():
-    """
-    Retrieves and displays information about the first SpaceX launch.
-        Get all launches
-        Sort by oldest first
-        Get first launch
-        Extract IDs
-        Get rocket info
-        Get launchpad info
-        Convert UTC to local time 
-    """
-    # Step 1: Get all launches
-    url = "https://api.spacexdata.com/v4/launches"
+def get_upcoming_launch():
+    """Get the first upcoming launch and print its details"""
+    url = "https://api.spacexdata.com/v4/launches/upcoming"
     launches = requests.get(url).json()
 
-    # Step 2: Sort by oldest first
-    launches.sort(key=lambda l: l.get("date_unix", float('inf')))
-
-    # Step 3: Get first launch
+    # Sort upcoming launches by date
+    launches.sort(key=lambda x: x['date_unix'])
     first = launches[0]
 
-    # Step 4: Extract IDs
-    rocket_id = first["rocket"]
-    launchpad_id = first["launchpad"]
+    rocket_url = f"https://api.spacexdata.com/v4/rockets/{first['rocket']}"
+    launchpad_url = (
+        f"https://api.spacexdata.com/v4/launchpads/{first['launchpad']}"
+    )
 
-    # Step 5: Get rocket info
-    rocket = requests.get(f"https://api.spacexdata.com/v4/rockets/{rocket_id}"
-                          ).json()
-    rocket_name = rocket["name"]
+    rocket = requests.get(rocket_url).json()
+    launchpad = requests.get(launchpad_url).json()
 
-    # Step 6: Get launchpad info
-    launchpad = requests.get(
-        f"https://api.spacexdata.com/v4/launchpads/{launchpad_id}"
-        ).json()
-    launchpad_name = launchpad["name"]
-    locality = launchpad["locality"]
-
-    # Step 7: Convert UTC to local time (ISO format with offset)
-    utc_time = datetime.fromisoformat(first["date_utc"].replace('Z', '+00:00'))
-    local_time = utc_time.astimezone()  # local timezone automatically
-    formatted_time = local_time.isoformat()
-
-    # Step 8: Final output
     print(
-    f"{first['name']} ({formatted_time}) "
-    f"{rocket_name} - {launchpad_name.strip()} ({locality.strip()})"
-)
+        f"{first['name']} ({first['date_local']}) {rocket['name']} - "
+        f"{launchpad['name']} ({launchpad['locality']})"
+    )
 
 
-if __name__ == '__main__':
-    get_first_launch()
+if __name__ == "__main__":
+    get_upcoming_launch()
