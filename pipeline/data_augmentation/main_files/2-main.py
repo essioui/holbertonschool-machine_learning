@@ -1,0 +1,16 @@
+#!/usr/bin/env python3
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+import tensorflow as tf
+import tensorflow_datasets as tfds
+import matplotlib.pyplot as plt
+rotate_image = __import__('2-rotate').rotate_image
+
+tf.random.set_seed(2)
+
+doggies = tfds.load('stanford_dogs', split='train', as_supervised=True)
+for image, _ in doggies.shuffle(10).take(1):
+    plt.imshow(rotate_image(image))
+    plt.show()
