@@ -15,30 +15,22 @@ def pca_color(image, alphas):
     Returns:
         tf.Tensor: Augmented image of same shape and dtype uint8
     """
-    image = tf.cast(image, tf.float32)  # keep values in 0-255
+    image = tf.cast(image, tf.float32) / 255.0
     orig_shape = tf.shape(image)
-    
-    # Flatten image to (num_pixels, 3)
-    flat_image = tf.reshape(image, [-1, 3])
-    
-    # Compute mean and center
+    flat_image = tf.reshape(image, [-1,3])
+
     mean = tf.reduce_mean(flat_image, axis=0)
     centered = flat_image - mean
 
-    # Covariance matrix
     cov = tf.matmul(tf.transpose(centered), centered) / tf.cast(tf.shape(flat_image)[0], tf.float32)
-    
-    # Eigen decomposition
     eigvals, eigvecs = tf.linalg.eigh(cov)
-    
-    # Delta adjustment for each channel
+
     alphas = tf.constant(alphas, dtype=tf.float32)
     delta = tf.matmul(eigvecs, tf.reshape(eigvals * alphas, [3,1]))
-    delta = tf.reshape(delta, [1,3])  # add once per channel
+    delta = tf.reshape(delta, [1,3])
 
-    # Apply augmentation
     augmented = flat_image + delta
-    augmented = tf.clip_by_value(augmented, 0, 255)
-    
-    # Reshape back to original
-    return tf.cast(tf.reshape(augmented, orig_shape), tf.uint8)
+    augmented = tf.clip_by_value(augmented, 0, 1)
+    augmented = tf.reshape(augmented, orig_shape)
+
+    return tf.cast(augmented * 255, tf.uint8)
