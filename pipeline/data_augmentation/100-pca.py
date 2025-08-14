@@ -1,45 +1,44 @@
 #!/usr/bin/env python3
 """
-Module for PCA Color Augmentation as described in the AlexNet paper.
+PCA Color Augmentation
 """
 import tensorflow as tf
 
-
 def pca_color(image, alphas):
     """
-    Performs PCA color augmentation on an image.
+    Performs PCA color augmentation on an image as in AlexNet paper.
 
     Args:
-        image (tf.Tensor): A 3D tensor containing the image to augment.
-        alphas (tuple): A tuple of length 3 containing the amount each
-                   channel should change.
+        image (tf.Tensor): 3D tensor of shape (H, W, 3)
+        alphas (tuple or np.ndarray): length-3 vector for channel changes
 
     Returns:
-        tf.Tensor: The augmented image.
+        tf.Tensor: Augmented image of same shape and dtype uint8
     """
-    # Normalize the image to [0, 1]
-    image = tf.cast(image, tf.float32) / 255.0
-    # Reshape the image to (pixel_count, 3)
-    flat_image = tf.reshape(image, (-1, 3))
-    # Compute the mean and center the image
-    mean = tf.reduce_mean(flat_image, axis=0, keepdims=True)
-    centered_image = flat_image - mean
-    # Compute the covariance matrix
-    covariance_matrix = \
-        tf.matmul(tf.transpose(centered_image),
-                  centered_image) / tf.cast(tf.shape(flat_image)[0],
-                                            tf.float32)
+    image = tf.cast(image, tf.float32)  # keep values in 0-255
+    orig_shape = tf.shape(image)
+    
+    # Flatten image to (num_pixels, 3)
+    flat_image = tf.reshape(image, [-1, 3])
+    
+    # Compute mean and center
+    mean = tf.reduce_mean(flat_image, axis=0)
+    centered = flat_image - mean
 
-    # Compute eigenvalues and eigenvectors
-    eigenvalues, eigenvectors = tf.linalg.eigh(covariance_matrix)
-    # Adjust colors using eigenvalues and alphas
-    delta = tf.matmul(eigenvectors, tf.reshape(eigenvalues * alphas, [-1, 1]))
-    delta = tf.transpose(delta)
-    delta = tf.broadcast_to(delta, tf.shape(centered_image))
-    augmented_image = centered_image + delta + mean
-    # Clip values to [0, 1] and reshape back to original shape
-    augmented_image = tf.clip_by_value(augmented_image, 0, 1)
-    augmented_image = tf.reshape(augmented_image, tf.shape(image))
+    # Covariance matrix
+    cov = tf.matmul(tf.transpose(centered), centered) / tf.cast(tf.shape(flat_image)[0], tf.float32)
+    
+    # Eigen decomposition
+    eigvals, eigvecs = tf.linalg.eigh(cov)
+    
+    # Delta adjustment for each channel
+    alphas = tf.constant(alphas, dtype=tf.float32)
+    delta = tf.matmul(eigvecs, tf.reshape(eigvals * alphas, [3,1]))
+    delta = tf.reshape(delta, [1,3])  # add once per channel
 
-    # Convert back to tensor and scale to [0, 255]
-    return tf.cast(augmented_image * 255, tf.uint8)
+    # Apply augmentation
+    augmented = flat_image + delta
+    augmented = tf.clip_by_value(augmented, 0, 255)
+    
+    # Reshape back to original
+    return tf.cast(tf.reshape(augmented, orig_shape), tf.uint8)
