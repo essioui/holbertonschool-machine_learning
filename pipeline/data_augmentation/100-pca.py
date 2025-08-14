@@ -1,29 +1,29 @@
 #!/usr/bin/env python3
 """
-PCA Color Augmentation
+Module for PCA Color Augmentation as described in the AlexNet paper.
 """
 import tensorflow as tf
 
 
 def pca_color(image, alphas):
     """
-    PCA color augmentation as described in the AlexNet paper
+    Performs PCA color augmentation on an image.
+
     Args:
-        image is a 3D tf.Tensor containing the image to change
-        alphas a tuple of length 3 containing the amount channel should change
+        image (tf.Tensor): A 3D tensor containing the image to augment.
+        alphas (tuple): A tuple of length 3 containing the amount each
+                   channel should change.
+
     Returns:
-        the augmented image
+        tf.Tensor: The augmented image.
     """
     # Normalize the image to [0, 1]
     image = tf.cast(image, tf.float32) / 255.0
-
     # Reshape the image to (pixel_count, 3)
     flat_image = tf.reshape(image, (-1, 3))
-
     # Compute the mean and center the image
     mean = tf.reduce_mean(flat_image, axis=0, keepdims=True)
     centered_image = flat_image - mean
-
     # Compute the covariance matrix
     covariance_matrix = \
         tf.matmul(tf.transpose(centered_image),
@@ -32,13 +32,11 @@ def pca_color(image, alphas):
 
     # Compute eigenvalues and eigenvectors
     eigenvalues, eigenvectors = tf.linalg.eigh(covariance_matrix)
-
     # Adjust colors using eigenvalues and alphas
     delta = tf.matmul(eigenvectors, tf.reshape(eigenvalues * alphas, [-1, 1]))
     delta = tf.transpose(delta)
     delta = tf.broadcast_to(delta, tf.shape(centered_image))
     augmented_image = centered_image + delta + mean
-
     # Clip values to [0, 1] and reshape back to original shape
     augmented_image = tf.clip_by_value(augmented_image, 0, 1)
     augmented_image = tf.reshape(augmented_image, tf.shape(image))
